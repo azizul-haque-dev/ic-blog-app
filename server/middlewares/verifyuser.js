@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
 import UserModel from "../models/UserModel.js";
+import { verifyAccessToken } from "../services/token.services.js";
 
 export const verifyUser = async (req, res, next) => {
   try {
@@ -13,7 +13,7 @@ export const verifyUser = async (req, res, next) => {
 
     //  2. Try verifying access token first
     try {
-      const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+      const decoded = verifyAccessToken(accessToken);
       req.user = decoded;
       // Token is valid → go to next route
       return next();
@@ -30,31 +30,23 @@ export const verifyUser = async (req, res, next) => {
     }
 
     try {
-      const decodedRefresh = jwt.verify(
-        refreshToken,
-        process.env.JWT_REFRESH_SECRET
-      );
+      const decodedRefresh = verifyRefreshToken(refreshToken);
       const user = await UserModel.findById(decodedRefresh.id).select(
         "-password"
       );
 
-      if (!user || user.refreshToken !== refreshToken) {
+      if (!user) {
         return res.status(403).json({ message: "Invalid refresh token" });
       }
 
       //  Generate new access token
-      const newAccessToken = jwt.sign(
-        { id: user._id, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: "15m" }
-      );
+      const newAccessToken = generateAccessToken({
+        id: user._id,
+        role: user.role
+      });
 
       //  issue new refresh token
-      const newRefreshToken = jwt.sign(
-        { id: user._id },
-        process.env.JWT_REFRESH_SECRET,
-        { expiresIn: "7d" }
-      );
+      const newRefreshToken = generateRefreshToken({ id: user._id });
 
       // ✅ Set new cookies
       res.cookie("accessToken", newAccessToken, {

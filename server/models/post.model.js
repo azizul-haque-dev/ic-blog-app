@@ -1,8 +1,8 @@
-import cloudinary from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
-import { CommentModel } from "./comments.models";
-import { DislikeModel } from "./dislike.model";
-import { LikeModel } from "./like.models";
+import { CommentModel } from "./comments.models.js";
+import { DislikeModel } from "./dislike.model.js";
+import { LikeModel } from "./like.models.js";
 
 const postSchema = new mongoose.Schema(
   {
@@ -40,7 +40,7 @@ postSchema.pre("findOneAndDelete", async function (next) {
 
     // 1. Delete post image from Cloudinary
     if (doc.imageId) {
-      await cloudinary.v2.uploader.destroy(doc.imageId);
+      await cloudinary.uploader.destroy(doc.imageId);
     }
 
     //  Delete all comments related to this post

@@ -1,4 +1,5 @@
 import argon2 from "argon2";
+import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -49,7 +50,7 @@ userSchema.pre("remove", async function (next) {
   try {
     if (this.avatarId) {
       // delete fromCloudinary
-      await cloudinary.v2.uploader.destroy(this.avatarId);
+      await cloudinary.uploader.destroy(this.avatarId);
     }
     next();
   } catch (err) {
@@ -63,7 +64,7 @@ userSchema.pre("findOneAndDelete", async function (next) {
     const doc = await this.model.findOne(this.getFilter());
     if (doc && doc.avatarId) {
       // delete fromCloudinary
-      await cloudinary.v2.uploader.destroy(doc.avatarId);
+      await cloudinary.uploader.destroy(doc.avatarId);
     }
     next();
   } catch (err) {
