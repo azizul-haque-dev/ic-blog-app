@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
-export function generateAccessToken(id) {
-  return jwt.sign(id, process.env.ACCESS_SECRET, { expiresIn: "15m" });
+export function generateAccessToken(payload) {
+  return jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "15m" });
 }
 
-export function generateRefreshToken(id) {
-  return jwt.sign(id, process.env.REFRESH_SECRET, { expiresIn: "7d" });
+export function generateRefreshToken(payload) {
+  return jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "7d" });
 }
 
 export function verifyAccessToken(token) {
