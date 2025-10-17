@@ -17,10 +17,10 @@ app.get("/test", (req, res) => {
   res.send("Test route is working!");
 });
 
-// User Routes
+//  Routes
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error(err.stack, "error via middleware");
   if (process.env.NODE_ENV === "development") {
     return res.status(500).json({ message: err.message, stack: err.stack });
   }
