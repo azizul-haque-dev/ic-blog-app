@@ -1,5 +1,5 @@
-import UserModel from "../models/UserModel.js";
-import { verifyAccessToken } from "../services/token.services.js";
+import {UserModel} from "../models/user.models.js";
+import { verifyAccessToken, verifyRefreshToken, generateAccessToken, generateRefreshToken } from "../services/token.services.js";
 
 export const verifyUser = async (req, res, next) => {
   try {
