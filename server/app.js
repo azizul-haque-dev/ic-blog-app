@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import authRoutes from "./routes/auth.route.js";
 
 dotenv.config();
 
@@ -17,7 +18,8 @@ app.get("/test", (req, res) => {
   res.send("Test route is working!");
 });
 
-//  Routes
+// auth route
+app.use("/api/auth", authRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack, "error via middleware");

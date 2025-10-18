@@ -1,10 +1,30 @@
 import jwt from "jsonwebtoken";
+
 export function generateAccessToken(payload) {
-  return jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "15m" });
+  try {
+    return jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "15m" });
+  } catch (error) {
+    console.error("Error generating access token:", error);
+    throw new Error("Failed to generate access token");
+  }
 }
 
 export function generateRefreshToken(payload) {
-  return jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "7d" });
+  try {
+    return jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "7d" });
+  } catch (error) {
+    console.error("Error generating refresh token:", error);
+    throw new Error("Failed to generate refresh token");
+  }
+}
+
+export function generateVerifyEmailToken(email) {
+  try {
+    return jwt.sign(email, process.env.EMAIL_SECRET, { expiresIn: "5m" });
+  } catch (error) {
+    console.error("Error generating email verification token:", error);
+    throw new Error("Failed to generate email verification token");
+  }
 }
 
 export function verifyAccessToken(token) {
@@ -18,6 +38,15 @@ export function verifyAccessToken(token) {
 export function verifyRefreshToken(token) {
   try {
     return jwt.verify(token, process.env.REFRESH_SECRET);
+  } catch (error) {
+    console.error("Token verification failed:", error);
+    return null;
+  }
+}
+
+export function verifyEmailToken(token) {
+  try {
+    return jwt.verify(token, process.env.EMAIL_SECRET);
   } catch (error) {
     console.error("Token verification failed:", error);
     return null;

@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import { PostModel } from "./post.model.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -11,6 +12,7 @@ const userSchema = new mongoose.Schema(
     avatarId: { type: String, default: "" },
     isVerified: { type: Boolean, default: false },
     emailVerificationToken: { type: String, default: null },
+    verificationTokenExpireAt: { type: Date, default: null },
     status: {
       type: String,
       default: "pending",
@@ -65,6 +67,8 @@ userSchema.pre("findOneAndDelete", async function (next) {
     if (doc && doc.avatarId) {
       // delete fromCloudinary
       await cloudinary.uploader.destroy(doc.avatarId);
+      // delete all user post
+      await PostModel.deleteMany({ userId: doc._id });
     }
     next();
   } catch (err) {
