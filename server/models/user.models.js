@@ -13,6 +13,9 @@ const userSchema = new mongoose.Schema(
     isVerified: { type: Boolean, default: false },
     emailVerificationToken: { type: String, default: null },
     verificationTokenExpireAt: { type: Date, default: null },
+    posts: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: true }
+    ],
     status: {
       type: String,
       default: "pending",

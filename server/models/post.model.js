@@ -21,6 +21,7 @@ const postSchema = new mongoose.Schema(
       default: "pending",
       enum: ["approved", "rejected", "pending"]
     },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
     dislikes: [
       { type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }
@@ -57,6 +58,15 @@ postSchema.pre("findOneAndDelete", async function (next) {
     next(err);
   }
 });
-
+postSchema.post("save", async function (doc, next) {
+  try {
+    await UserModel.findByIdAndUpdate(doc.userId, {
+      $push: { posts: doc._id }
+    });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 export const PostModel =
   mongoose.models.Post || mongoose.model("Post", postSchema);
