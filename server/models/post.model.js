@@ -1,5 +1,5 @@
-import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import cloudinary from "../utils/coudinary.config.js";
 import { CommentModel } from "./comments.models.js";
 import { DislikeModel } from "./dislike.model.js";
 import { LikeModel } from "./like.models.js";

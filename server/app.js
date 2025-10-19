@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import authRoutes from "./routes/auth.route.js";
+import userRoutes from "./routes/user.route.js";
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ app.get("/test", (req, res) => {
 
 // auth route
 app.use("/api/auth", authRoutes);
+// user route
+app.use("/api/user", userRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack, "error via middleware");

@@ -1,6 +1,6 @@
 import argon2 from "argon2";
-import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import cloudinary from "../utils/coudinary.config.js";
 import { PostModel } from "./post.model.js";
 
 const userSchema = new mongoose.Schema(

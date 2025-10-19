@@ -26,6 +26,14 @@ export function generateVerifyEmailToken(email) {
     throw new Error("Failed to generate email verification token");
   }
 }
+export function generateResetToken(email) {
+  try {
+    return jwt.sign(email, process.env.JWT_SECRET, { expiresIn: "10m" });
+  } catch (error) {
+    console.error("Error generating password reset token:", error);
+    throw new Error("Failed to generate password reset token");
+  }
+}
 
 export function verifyAccessToken(token) {
   try {
