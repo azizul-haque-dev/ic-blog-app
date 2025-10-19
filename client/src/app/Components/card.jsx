@@ -1,5 +1,5 @@
 export default function Card({ post }) {
-  const { title, content, imageUrl, categories, status } = post;
+  const { title, content, imageUrl, categories, status, createdAt } = post;
 
   const statusColor =
     status === "approved"
@@ -25,10 +25,14 @@ export default function Card({ post }) {
             </span>
           ))}
         </div>
-
-        <span className={`text-sm font-medium ${statusColor}`}>
-          Status: {status}
-        </span>
+        <div className="flex justify-between">
+          <span className={`text-sm font-medium ${statusColor}`}>
+            Status: {status}
+          </span>
+          <span className="inline-block border border-blue-300 text-blue-500 px-2 py-0.5 rounded-full text-xs font-medium">
+            {createdAt}
+          </span>
+        </div>
       </div>
       {/* <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-gray-100 to-transparent rounded-b-2xl"></div> */}
       <div className="flex justify-end mx-4 my-4">
