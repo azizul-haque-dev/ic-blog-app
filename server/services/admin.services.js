@@ -1,5 +1,6 @@
 import { UserModel } from "../models/user.models.js";
 import { PostModel } from "../models/post.model.js";
+import { CommentModel } from "../models/comments.models.js";
 
 export const getAllUsersWithStats = async () => {
   const users = await UserModel.find({}).select("-password");
@@ -65,3 +66,38 @@ export const updatePostStatusById = async (id, status) => {
   return post;
 };
 
+
+
+
+export const updateCommentStatusById = async (commentId, status) => {
+  try {
+    const comment = await CommentModel.findByIdAndUpdate(
+      commentId,
+      { status },
+      { new: true, runValidators: true }
+    );
+
+    if (!comment) {
+      throw new Error("Comment not found.");
+    }
+    return comment;
+  } catch (error) {
+    console.error("Error in updateCommentStatusById service:", error);
+    throw error;
+  }
+};
+
+
+export const deleteCommentById = async (commentId) => {
+  try {
+    const result = await CommentModel.findByIdAndDelete(commentId);
+
+    if (!result) {
+      throw new Error("Comment not found or already deleted.");
+    }
+
+    return { message: "Comment permanently deleted successfully." };
+  } catch (error) { 
+    console.log(error)
+  }
+  }

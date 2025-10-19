@@ -1,5 +1,5 @@
 import { z } from "zod";
-import {getAllUsersWithStats, createNewUser, updateUserStatusById, getAllPostsFromAllUsers, updatePostStatusById } from "../services/admin.services.js"
+import {getAllUsersWithStats, createNewUser, updateUserStatusById, getAllPostsFromAllUsers, updatePostStatusById , updateCommentStatusById, deleteCommentById} from "../services/admin.services.js"
 
 import { findUserByEmail } from "../services/user.services.js"; 
 
@@ -18,6 +18,13 @@ const statusUpdateSchema = z.object({
 
 const postStatusUpdateSchema = z.object({
   status: z.enum(["pending", "approved", "suspended"]),
+});
+
+
+const commentStatusSchema = z.object({
+  status: z.enum(["pending", "approved", "suspended"], {
+    required_error: "Status is required."
+  })
 });
 
 
@@ -106,4 +113,56 @@ export const updatePostStatus = async (req, res) => {
     res.status(501).json({ success: false, message: error.message });
   }
 };
+
+
+
+
+
+export const updateCommentStatus = async (req, res) => {
+  const { commentId } = req.params;
+  const parseBody = commentStatusSchema.safeParse(req.body);
+
+  if (!parseBody.success) {
+    return res.status(400).json({ success: false, errors: parseBody.error.issues });
+  }
+
+  try {
+    const updatedComment = await updateCommentStatusById(
+      commentId,
+      parseBody.data.status
+    );
+    res.status(200).json({
+      success: true,
+      message: "Comment status updated successfully.",
+      data: updatedComment,
+    });
+  } catch (error) {
+   
+    if (error.message === "Comment not found.") {
+      return res.status(404).json({ success: false, message: error.message });
+    }
+    
+    console.error("Controller Error - updateCommentStatus:", error);
+    res.status(500).json({ success: false, message: "An internal server error occurred." });
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  const { commentId } = req.params;
+
+  try {
+    const result = await deleteCommentById(commentId);
+    res.status(200).json({ success: true, message: result.message });
+  } catch (error) {
+    
+    if (error.message.includes("not found")) {
+      return res.status(404).json({ success: false, message: error.message });
+    }
+    
+    console.error("Controller Error - deleteComment:", error);
+    res.status(500).json({ success: false, message: "An internal server error occurred." });
+  }
+};
+
+
 

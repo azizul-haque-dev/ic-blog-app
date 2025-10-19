@@ -5,6 +5,8 @@ import {
   updateUserStatus,
   getAllPosts,
   updatePostStatus,
+  updateCommentStatus,
+  deleteComment
 
 } from "../controllers/admin.controller.js";
 import { verifyUser } from "../middlewares/verifyuser.js"; 
@@ -24,6 +26,9 @@ router.put("/users/:id/status", updateUserStatus);
 router.get("/posts", getAllPosts);
 router.put("/posts/:id/status", updatePostStatus);
 
+
+router.put("/comments/:commentId/status", updateCommentStatus);
+router.delete("/comments/:commentId", deleteComment);
 
 export default router;
 
