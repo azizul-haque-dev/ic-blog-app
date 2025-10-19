@@ -9,12 +9,12 @@ const forgetPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
-    // ✅ Validate email
+    // Validate email
     if (!email) {
       return res.status(400).json({ message: "Email is required." });
     }
 
-    // ✅ Check if user exists
+    // Check if user exists
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(200).json({
@@ -22,23 +22,23 @@ const forgetPassword = async (req, res) => {
       });
     }
 
-    // ✅ Generate reset token
+    // Generate reset token
     const token = generateResetToken({ email });
 
-    // ✅ Build reset link
+    // Build reset link
     const resetLink = `${process.env.APP_URL}/reset-password/${token}`;
 
-    // ✅ Prepare email template
+    // Prepare email template
     const template = PASSWORD_RESET_REQUEST_TEMPLATE(resetLink);
 
-    // ✅ Send email
+    //Send email
     await sendEmail({
       to: email,
       subject: "Reset your IC Blog App password",
       html: template
     });
 
-    // ✅ Send success response
+    // Send success response
     res.status(200).json({
       message: " You will receive a reset link. Please check your email"
     });
