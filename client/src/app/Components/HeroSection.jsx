@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 function HeroSection() {
   return (
@@ -35,9 +36,11 @@ function HeroSection() {
         </p>
 
         {/* CTA */}
-        <button className="px-8 py-3 text-lg font-bold text-white bg-[#7050ff] rounded-lg hover:bg-[#5a4bcf] transition duration-300 shadow-xl">
+        <Link
+          href="/blog"
+          className="inline-block px-8 py-3 text-lg font-bold text-white bg-[#7050ff] rounded-lg hover:bg-[#5a4bcf] transition duration-300 shadow-xl">
           Start Reading Now
-        </button>
+        </Link>
       </div>
     </section>
   );
