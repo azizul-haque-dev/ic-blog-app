@@ -34,7 +34,7 @@ coverage/
 # OS generated files
 .DS_Store
 Thumbs.db
-
+.next
 # IDE and Editor settings
 .vscode/
 .idea/

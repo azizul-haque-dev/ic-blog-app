@@ -5,6 +5,8 @@ import express from "express";
 import authRoutes from "./routes/auth.route.js";
 import postRoutes from "./routes/post.route.js";
 import userRoutes from "./routes/user.route.js";
+import adminRoutes from "./routes/admin.route.js";
+import commentRoutes from "./routes/comment.route.js"
 
 dotenv.config();
 
@@ -24,8 +26,14 @@ app.get("/test", (req, res) => {
 app.use("/api/auth", authRoutes);
 // user route
 app.use("/api/user", userRoutes);
+// admin route
+app.use("/api/admin", adminRoutes)
 // post route
 app.use("/api/post", postRoutes);
+
+// comment route
+app.use("/api/posts/:postId/comments", commentRoutes)
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack, "error via middleware");

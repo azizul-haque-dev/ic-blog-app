@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
   forgetPassword,
+  getUserProfile,
   resetPassword,
   uploadAvatar
 } from "../controllers/user.controllers.js";
@@ -18,5 +19,7 @@ router.patch(
 );
 router.post("/forget/password", forgetPassword);
 router.patch("/reset/password", resetPassword);
+
+router.get("/profile", verifyUser,  getUserProfile)
 
 export default router;
