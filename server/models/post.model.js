@@ -22,7 +22,7 @@ const postSchema = new mongoose.Schema(
       default: "pending",
       enum: ["approved", "rejected", "pending"]
     },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "comment" }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
     dislikes: [
       { type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }
