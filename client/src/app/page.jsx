@@ -1,6 +1,7 @@
 import Card from "@/app/Components/card";
 import { posts } from "./damyData/post-damyData";
 import Button from "./Components/button";
+import Footer from "./Components/Footer";
 
 //DANY DATA PORE DATA PAWA GELE
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
         </div>
         <Button />
       </main>
+      <Footer />
     </>
   );
 }
