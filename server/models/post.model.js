@@ -3,6 +3,7 @@ import cloudinary from "../utils/coudinary.config.js";
 import { CommentModel } from "./comments.models.js";
 import { DislikeModel } from "./dislike.model.js";
 import { LikeModel } from "./like.models.js";
+import { UserModel } from "./user.models.js";
 
 const postSchema = new mongoose.Schema(
   {
@@ -60,13 +61,15 @@ postSchema.pre("findOneAndDelete", async function (next) {
 });
 postSchema.post("save", async function (doc, next) {
   try {
-    await UserModel.findByIdAndUpdate(doc.userId, {
-      $push: { posts: doc._id }
-    });
-    next();
+    if (doc.isNew) {
+      await UserModel.findByIdAndUpdate(doc.userId, {
+        $push: { posts: doc._id }
+      });
+    }
   } catch (err) {
     next(err);
   }
 });
+
 export const PostModel =
   mongoose.models.Post || mongoose.model("Post", postSchema);

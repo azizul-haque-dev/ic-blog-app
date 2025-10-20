@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { z } from "zod";
 import { PostModel } from "../models/post.model.js";
+import cloudinary from "../utils/coudinary.config.js";
 
 //  Zod Schema — for validating incoming request data
 const postSchema = z.object({
@@ -29,9 +30,9 @@ export const createPost = async (req, res) => {
     const { id } = req.user;
 
     // Handle optional categories field
-    let { categoris } = req.body;
-    if (!categoris && !Array.isArray(categoris)) {
-      categoris = [];
+    let { categories } = req.body;
+    if (!categories && !Array.isArray(categories)) {
+      categories = [];
     }
 
     // Check if user exists
@@ -48,7 +49,7 @@ export const createPost = async (req, res) => {
       title,
       content,
       userId: userIdObject,
-      categoris,
+      categories,
       imageUrl,
       imageId
     });
@@ -63,7 +64,7 @@ export const createPost = async (req, res) => {
     if (error instanceof z.ZodError) {
       return res.status(400).json({
         message: "Validation error",
-        errors: error.errors.map((err) => err.message)
+        errors: error?.errors?.map((err) => err.message) || []
       });
     }
 
@@ -77,37 +78,44 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
-    const { categories } = req.body;
-    const validatedData = postSchema.parse(req.body);
+    let { categories } = req.body;
+
+    // যদি categories string হয়, তাহলে parse করো
+    if (typeof categories === "string") {
+      try {
+        categories = JSON.parse(categories);
+      } catch {
+        categories = [];
+      }
+    }
 
     // set categories to an empty array if it's not provided or not an array
     if (!categories || !Array.isArray(categories)) {
-      validatedData.categories = [];
-    }
-    // set updated categories
-    if (categories) {
-      validatedData.categories = categories;
+      return res.status(400).json({
+        success: false,
+        message: "Categories must be an array"
+      });
     }
 
-    const updatedPost = await PostModel.findByIdAndUpdate(
+    const { title, content } = postSchema.parse(req.body);
+    const updatePost = await PostModel.findByIdAndUpdate(
       id,
-      { $set: validatedData },
+      { title, content, categories },
       { new: true }
     );
-
-    if (!updatedPost) {
+    if (!updatePost) {
       return res.status(404).json({ message: "Post not found" });
     }
 
     return res.status(200).json({
       message: "Post updated successfully!",
-      post: updatedPost
+      updatePost
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return res.status(400).json({
         message: "Validation error",
-        errors: error.errors.map((err) => err.message)
+        errors: error?.errors?.map((err) => err.message) || []
       });
     }
     console.error("Error updating post:", error);
@@ -135,6 +143,7 @@ export const updatePostImage = async (req, res) => {
         message: "No file uploaded!"
       });
     }
+    console.log(req.file, "update image");
 
     const post = await PostModel.findById(id);
     if (!post) {
