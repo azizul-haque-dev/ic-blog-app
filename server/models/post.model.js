@@ -3,6 +3,7 @@ import cloudinary from "../utils/coudinary.config.js";
 import { CommentModel } from "./comments.models.js";
 import { DislikeModel } from "./dislike.model.js";
 import { LikeModel } from "./like.models.js";
+import { UserModel } from "./user.models.js";
 
 const postSchema = new mongoose.Schema(
   {
@@ -21,6 +22,7 @@ const postSchema = new mongoose.Schema(
       default: "pending",
       enum: ["approved", "rejected", "pending"]
     },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
     dislikes: [
       { type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }
@@ -53,6 +55,17 @@ postSchema.pre("findOneAndDelete", async function (next) {
     await DislikeModel.deleteMany({ postId: doc._id });
 
     next();
+  } catch (err) {
+    next(err);
+  }
+});
+postSchema.post("save", async function (doc, next) {
+  try {
+    if (doc.isNew) {
+      await UserModel.findByIdAndUpdate(doc.userId, {
+        $push: { posts: doc._id }
+      });
+    }
   } catch (err) {
     next(err);
   }

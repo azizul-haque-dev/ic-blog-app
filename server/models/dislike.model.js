@@ -18,6 +18,16 @@ const dislikeSchema = new mongoose.Schema(
 
 // Ensure a user can dislike a post only once
 dislikeSchema.index({ postId: 1, userId: 1 }, { unique: true });
+dislikeSchema.post("save", async function (doc, next) {
+  try {
+    await PostModel.findByIdAndUpdate(doc.postId, {
+      $push: { dislikes: doc._id }
+    });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 export const DislikeModel =
   mongoose.models.Dislike || mongoose.model("Dislike", dislikeSchema);
