@@ -19,5 +19,16 @@ const likeSchema = new mongoose.Schema(
 // Ensure a user can like a post only once
 likeSchema.index({ postId: 1, userId: 1 }, { unique: true });
 
+likeSchema.post("save", async function (doc, next) {
+  try {
+    await PostModel.findByIdAndUpdate(doc.postId, {
+      $push: { likes: doc._id }
+    });
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 export const LikeModel =
   mongoose.models.Like || mongoose.model("Like", likeSchema);

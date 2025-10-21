@@ -26,12 +26,20 @@ export function generateVerifyEmailToken(email) {
     throw new Error("Failed to generate email verification token");
   }
 }
+export function generateResetToken(email) {
+  try {
+    return jwt.sign(email, process.env.JWT_SECRET, { expiresIn: "10m" });
+  } catch (error) {
+    console.error("Error generating password reset token:", error);
+    throw new Error("Failed to generate password reset token");
+  }
+}
 
 export function verifyAccessToken(token) {
   try {
     return jwt.verify(token, process.env.ACCESS_SECRET);
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error("Access Token verification failed:", error);
     return null;
   }
 }
@@ -39,7 +47,7 @@ export function verifyRefreshToken(token) {
   try {
     return jwt.verify(token, process.env.REFRESH_SECRET);
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error("Refresh Token verification failed:", error);
     return null;
   }
 }
@@ -48,7 +56,7 @@ export function verifyEmailToken(token) {
   try {
     return jwt.verify(token, process.env.EMAIL_SECRET);
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error("Email Token verification failed:", error);
     return null;
   }
 }
