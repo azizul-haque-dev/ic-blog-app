@@ -4,8 +4,10 @@ import { UserModel } from "../models/user.models.js";
 import { sendEmail } from "../services/sendEmail.js";
 import {
   generateVerifyEmailToken,
-  verifyEmailToken
+  verifyEmailToken, generateAccessToken, generateRefreshToken
 } from "../services/token.services.js";
+
+import { validatePassword } from "../services/auth.services.js";
 import { VERIFICATION_EMAIL_TEMPLATE } from "../utils/emailTemplete.js";
 const loginSchema = z.object({
   email: z
@@ -147,4 +149,112 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-export { registerUser, verifyEmail };
+
+
+
+const loginUser = async (req, res) => {
+  try {
+    //  Validate request body 
+    const parseBody = loginSchema.safeParse(req.body);
+    if (!parseBody.success) {
+      return res
+        .status(400)
+        .json({ success: false, message: parseBody.error.issues });
+    }
+    const { email, password } = parseBody.data;
+
+    //  Find user by email
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    //  Check if email is verified
+    if (!user.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email before logging in.",
+      });
+    }
+
+    //Check if user account status is approved (not pending or suspended)
+    if (user.status !== "approved") {
+      return res.status(403).json({
+        success: false,
+        message: `Your account status is: ${user.status}. Please contact support.`,
+      });
+    }
+
+    //  Verify password
+    const isPasswordValid = await validatePassword(user.password, password);
+    if (!isPasswordValid) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    //  Generate Access and Refresh Tokens
+    const accessToken = generateAccessToken({ id: user._id, role: user.role });
+    const refreshToken = generateRefreshToken({ id: user._id });
+
+    // Set tokens in secure, httpOnly cookies
+    const cookieOptions = {
+      httpOnly: true,
+    };
+
+    res.cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+  
+    const userData = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged in successfully",
+      user: userData,
+    });
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+const logoutUser = (req, res) => {
+  try {
+    const cookieOptions = {
+      httpOnly: true,
+    };
+
+    // Clear both cookies 
+    res.clearCookie("accessToken")
+    res.clearCookie("refreshToken")
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Error logging out user:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export { registerUser, verifyEmail, loginUser, logoutUser };

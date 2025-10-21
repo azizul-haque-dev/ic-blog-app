@@ -1,5 +1,10 @@
-import UserModel from "../models/UserModel.js";
-import { verifyAccessToken } from "../services/token.services.js";
+import { UserModel } from "../models/user.models.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken
+} from "../services/token.services.js";
 
 export const verifyUser = async (req, res, next) => {
   try {
@@ -8,7 +13,9 @@ export const verifyUser = async (req, res, next) => {
 
     //  1. If no tokens at all
     if (!accessToken && !refreshToken) {
-      return res.status(401).json({ message: "No tokens provided" });
+      return res
+        .status(401)
+        .json({ success: false, message: "No tokens provided" });
     }
 
     //  2. Try verifying access token first

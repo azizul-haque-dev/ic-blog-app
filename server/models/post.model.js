@@ -1,8 +1,9 @@
-import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import cloudinary from "../utils/coudinary.config.js";
 import { CommentModel } from "./comments.models.js";
 import { DislikeModel } from "./dislike.model.js";
 import { LikeModel } from "./like.models.js";
+import { UserModel } from "./user.models.js";
 
 const postSchema = new mongoose.Schema(
   {
@@ -13,14 +14,15 @@ const postSchema = new mongoose.Schema(
       required: true
     },
     content: { type: String, required: true },
-    imageUrl: { type: String, default: "" },
-    imageId: { type: String, default: "" },
-    categories: { type: [String], default: [] },
+    imageUrl: { type: String, required: true },
+    imageId: { type: String, required: true },
+    categories: { type: [String], required: true },
     status: {
       type: String,
       default: "pending",
       enum: ["approved", "rejected", "pending"]
     },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "comment" }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
     dislikes: [
       { type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }
@@ -53,6 +55,17 @@ postSchema.pre("findOneAndDelete", async function (next) {
     await DislikeModel.deleteMany({ postId: doc._id });
 
     next();
+  } catch (err) {
+    next(err);
+  }
+});
+postSchema.post("save", async function (doc, next) {
+  try {
+    if (doc.isNew) {
+      await UserModel.findByIdAndUpdate(doc.userId, {
+        $push: { posts: doc._id }
+      });
+    }
   } catch (err) {
     next(err);
   }
