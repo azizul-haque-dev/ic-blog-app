@@ -4,5 +4,8 @@
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/register/page": "app/register/page.js",
+  "/user/addPost/page": "app/user/addPost/page.js",
+  "/user/myallposts/page": "app/user/myallposts/page.js",
+  "/user/page": "app/user/page.js",
   "/verifyemail/page": "app/verifyemail/page.js"
 }
