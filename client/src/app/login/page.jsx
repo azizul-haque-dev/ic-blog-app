@@ -30,15 +30,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
-      {/* sera ui Gradient Background */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(125% 125% at 50% 90%, #fff 40%, #6366f1 100%)",
-        }}
-      />
-
       {/* Content */}
       <div className="relative z-10 flex items-center justify-center px-6 py-12 min-h-screen">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl w-full items-center">

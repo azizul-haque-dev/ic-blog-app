@@ -3,19 +3,8 @@ import Link from "next/link";
 
 function HeroSection() {
   return (
-    <section className="py-24 px-6 md:px-12 bg-white relative overflow-hidden">
+    <section className="py-24 px-6 md:px-12  relative overflow-hidden">
       {/*  Grid Background   */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(142, 142, 142, 0.08) 5px, rgba(142, 142, 142, 0.08) 6px, transparent 6px, transparent 15px),
-            repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(142, 142, 142, 0.08) 5px, rgba(142, 142, 142, 0.08) 6px, transparent 6px, transparent 15px),
-            repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(162, 162, 162, 0.06) 10px, rgba(162, 162, 162, 0.06) 11px, transparent 11px, transparent 30px),
-            repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(162, 162, 162, 0.06) 10px, rgba(162, 162, 162, 0.06) 11px, transparent 11px, transparent 30px)
-          `,
-        }}
-      />
 
       {/* Content Container */}
       <div className="max-w-5xl mt-9 mx-auto text-center relative z-10">
