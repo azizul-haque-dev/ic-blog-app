@@ -27,15 +27,6 @@ const Page = () => {
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
-      {/*  Gradient Background */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(125% 125% at 50% 90%, #fff 40%, #6366f1 100%)",
-        }}
-      />
-
       {/* Content */}
       <div className="relative z-10 flex flex-col-reverse md:flex-row items-center justify-center px-4 py-12 gap-10">
         {/* Form Section */}

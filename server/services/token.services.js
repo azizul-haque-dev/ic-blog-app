@@ -39,7 +39,7 @@ export function verifyAccessToken(token) {
   try {
     return jwt.verify(token, process.env.ACCESS_SECRET);
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error("Access Token verification failed:", error);
     return null;
   }
 }
@@ -47,7 +47,7 @@ export function verifyRefreshToken(token) {
   try {
     return jwt.verify(token, process.env.REFRESH_SECRET);
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error("Refresh Token verification failed:", error);
     return null;
   }
 }
@@ -56,7 +56,7 @@ export function verifyEmailToken(token) {
   try {
     return jwt.verify(token, process.env.EMAIL_SECRET);
   } catch (error) {
-    console.error("Token verification failed:", error);
+    console.error("Email Token verification failed:", error);
     return null;
   }
 }

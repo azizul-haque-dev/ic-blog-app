@@ -6,15 +6,6 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden">
-      {/* Background gradient */}
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 80%, #f0f0ff 20%, #7033ff 90%)",
-        }}
-      />
-
       {/* Illustration */}
       <div className="relative">
         <Image

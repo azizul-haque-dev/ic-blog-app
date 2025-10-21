@@ -18,16 +18,6 @@ function NotFound() {
         className: "relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "absolute inset-0 -z-10",
-                style: {
-                    background: "radial-gradient(circle at 50% 80%, #f0f0ff 20%, #7033ff 90%)"
-                }
-            }, void 0, false, {
-                fileName: "[project]/src/app/not-found.js",
-                lineNumber: 10,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "relative",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     src: "/404.png",
@@ -38,12 +28,12 @@ function NotFound() {
                     priority: true
                 }, void 0, false, {
                     fileName: "[project]/src/app/not-found.js",
-                    lineNumber: 20,
+                    lineNumber: 11,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/not-found.js",
-                lineNumber: 19,
+                lineNumber: 10,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -51,7 +41,7 @@ function NotFound() {
                 children: "Oops! Page Not Found"
             }, void 0, false, {
                 fileName: "[project]/src/app/not-found.js",
-                lineNumber: 31,
+                lineNumber: 22,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -59,7 +49,7 @@ function NotFound() {
                 children: "The page you’re looking for doesn’t exist or has been moved. Let’s get you back on track."
             }, void 0, false, {
                 fileName: "[project]/src/app/not-found.js",
-                lineNumber: 34,
+                lineNumber: 25,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -68,7 +58,7 @@ function NotFound() {
                 children: "Go to Homepage"
             }, void 0, false, {
                 fileName: "[project]/src/app/not-found.js",
-                lineNumber: 40,
+                lineNumber: 31,
                 columnNumber: 7
             }, this)
         ]
