@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createPost,
   getPosts,
+  getUserAllPost,
   postDeleteById,
   singlePost,
   updatePost,
@@ -9,19 +10,30 @@ import {
 } from "../controllers/post.controllers.js";
 import upload from "../middlewares/uploadImage.js";
 import { verifyUser } from "../middlewares/verifyuser.js";
+import { isUser } from "../middlewares/roleAuth.js";
 
 const router = Router();
 
-router.post("/create", verifyUser, upload.single("image"), createPost);
+
+router.use(verifyUser, isUser)
+
+router.post("/create",  upload.single("image"), createPost);
 router.patch(
   "/update-post-image/:id",
-  verifyUser,
   upload.single("image"),
   updatePostImage
 );
-router.put("/update/:id", verifyUser, updatePost);
-router.delete("/delete/:id", verifyUser, postDeleteById);
-router.get("/get", verifyUser, getPosts);
-router.get("/get/:id", verifyUser, singlePost);
+
+
+
+router.put("/update/:id", updatePost);
+router.delete("/delete/:id",  postDeleteById);
+router.get("/get",  getPosts);
+router.get("/get/:id",  singlePost);
+
+router.get("/my-post", getUserAllPost)
+
+
+
 
 export default router;

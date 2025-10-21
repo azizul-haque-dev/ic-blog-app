@@ -2,18 +2,27 @@ import mongoose from "mongoose";
 import { z } from "zod";
 import { PostModel } from "../models/post.model.js";
 import cloudinary from "../utils/coudinary.config.js";
+import { getPostsByUserId } from "../services/post.services.js";
 
-//  Zod Schema — for validating incoming request data
+
+
+// Zod schema for validating post updates. All fields are optional.
 const postSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters long"),
-  content: z.string().min(10, "Content must be at least 10 characters long")
-});
+  title: z.string().min(3, "Title must be at least 3 characters."),
+  content: z.string().min(10, "Content must be at least 10 characters."),
+  categories: z.array(z.string()).min(1, "At least one category is required.")
+})
+
+
+
 
 // Controller function to create a new post
 export const createPost = async (req, res) => {
   try {
     // Validate request body using Zod
-    const { title, content, userId } = postSchema.parse(req.body);
+    const { title, content , categories } = postSchema.parse(req.body);
+
+    const userId = req.user.id
 
     // Check if a file is uploaded
     if (!req.file) {
@@ -27,23 +36,23 @@ export const createPost = async (req, res) => {
     const imageId = req.file.filename;
 
     // Extract user ID from authenticated user
-    const { id } = req.user;
+   
 
     // Handle optional categories field
-    let { categories } = req.body;
-    if (!categories && !Array.isArray(categories)) {
-      categories = [];
-    }
+  
+    // if (!categories && !Array.isArray(categories)) {
+    //   categories = [];
+    // }
 
     // Check if user exists
-    if (!id) {
+    if (!userId) {
       return res
         .status(400)
         .json({ success: false, message: "User not found!" });
     }
 
     //  Convert user ID to MongoDB ObjectId
-    const userIdObject = new mongoose.Types.ObjectId(id);
+    const userIdObject = new mongoose.Types.ObjectId(userId);
     // Create a new post document in MongoDB
     const newPost = new PostModel({
       title,
@@ -77,17 +86,18 @@ export const createPost = async (req, res) => {
 //  Update Post text fields only
 export const updatePost = async (req, res) => {
   try {
+    const { title, content, categories } = postSchema.parse(req.body);
     const { id } = req.params;
-    let { categories } = req.body;
+    // let { categories } = req.body;
 
     // যদি categories string হয়, তাহলে parse করো
-    if (typeof categories === "string") {
-      try {
-        categories = JSON.parse(categories);
-      } catch {
-        categories = [];
-      }
-    }
+    // if (typeof categories === "string") {
+    //   try {
+    //     categories = JSON.parse(categories);
+    //   } catch {
+    //     categories = [];
+    //   }
+    // }
 
     // set categories to an empty array if it's not provided or not an array
     if (!categories || !Array.isArray(categories)) {
@@ -97,7 +107,7 @@ export const updatePost = async (req, res) => {
       });
     }
 
-    const { title, content } = postSchema.parse(req.body);
+    
     const updatePost = await PostModel.findByIdAndUpdate(
       id,
       { title, content, categories },
@@ -305,5 +315,17 @@ export const singlePost = async (req, res) => {
       success: false,
       message: "Internal server error"
     });
+  }
+};
+
+
+// Get User All Post
+
+export const getUserAllPost = async (req, res) => {
+  try {
+    const posts = await getPostsByUserId(req.user.id);
+    res.status(200).json({ success: true, posts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error." });
   }
 };
