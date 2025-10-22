@@ -3,8 +3,8 @@ import BlogPost from "../Components/BlogPost";
 
 export default function BlogPage() {
   return (
-    <main className="min-h-screen text-white">
+    <div className="min-h-screen text-white">
       <BlogPost />
-    </main>
+    </div>
   );
 }
