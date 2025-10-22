@@ -18,18 +18,18 @@ export default function CommentCard() {
 
   return (
     <section className="max-w-3xl mx-auto py-8 px-4">
-      <h2 className="text-2xl font-bold mb-5 text-gray-900 dark:text-gray-100">
+      <h2 className="text-2xl font-bold mb-5 dark:text-gray-600">
         Comments ({comments.length})
       </h2>
 
-      <div className="space-y-4">
+      <div className="space-y-4 ">
         {comments.map((comment) => (
           <div
             key={comment._id}
-            className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-md transition bg-white dark:bg-[#12121a]"
+            className="border border-gray-100 dark:border-gray-300 rounded-xl p-4 hover:shadow-md transition bg-white dark:bg-[#dedee6]"
           >
             {/* Comment Content */}
-            <p className="text-gray-800 dark:text-gray-300 mb-2">
+            <p className="text-gray-900 dark:text-gray-900 mb-2">
               {comment.content}
             </p>
 

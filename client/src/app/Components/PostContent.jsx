@@ -7,7 +7,7 @@ export default function PostContent({ post }) {
   //
   // bg-[#ddddf0] text-gray-200 rounded-2xl shadow-lg bg-[#aaaada]
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 bg-black text-gray-200 rounded-2xl shadow-2xs  ">
+    <div className="max-w-4xl mx-auto px-4 py-10 bg-white text-gray-200 rounded-2xl shadow-2xs  ">
       {/* Hero Image */}
       <div className="relative w-full h-72 rounded-2xl shadow-lg overflow-hidden">
         <img
@@ -27,13 +27,13 @@ export default function PostContent({ post }) {
         </div>
       </div>
       {/* Title & Meta */}
-      <h1 className="text-3xl sm:text-4xl font-bold mt-6 text-white">
+      <h1 className="text-3xl sm:text-4xl font-bold mt-6 text-gray-600">
         {post.title}
       </h1>
-      <div className="flex flex-wrap justify-between items-center mt-3 text-sm text-gray-400">
+      <div className="flex flex-wrap justify-between items-center mt-3 text-sm text-gray-600">
         <p>
-          Published on{" "}
-          <span className="font-medium text-gray-300">
+          Published on:{" "}
+          <span className="font-medium text-gray-400">
             {new Date(post.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
@@ -43,7 +43,7 @@ export default function PostContent({ post }) {
         </p>
         <p>
           Updated:{" "}
-          <span className="text-gray-300">
+          <span className="text-gray-400">
             {new Date(post.updatedAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
@@ -53,15 +53,15 @@ export default function PostContent({ post }) {
         </p>
       </div>
       {/* Content */}
-      <div className="mt-8 text-gray-300 leading-relaxed text-lg">
+      <div className="mt-8 text-gray-600 leading-relaxed text-lg">
         {post.content}
       </div>
-      Like / Dislike Section
+      <div className="text-gray-500 mt-2">Like / Dislike Section</div>
       <div className="mt-8 flex gap-4 items-center">
-        <button className="flex items-center gap-2 bg-green-900/40 hover:bg-green-800 text-green-400 px-4 py-2 rounded-full transition">
+        <button className="flex items-center gap-2 bg-green-900/80 hover:bg-green-900 text-green-400 px-4 py-2 rounded-full transition">
           👍 {likeCount}
         </button>
-        <button className="flex items-center gap-2 bg-red-900/40 hover:bg-red-800 text-red-400 px-4 py-2 rounded-full transition">
+        <button className="flex items-center gap-2 bg-red-900/70 hover:bg-red-800 text-red-500 px-4 py-2 rounded-full transition">
           👎 {dislikeCount}
         </button>
       </div>

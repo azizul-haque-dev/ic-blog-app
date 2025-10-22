@@ -15,7 +15,7 @@ export default function PostCard({ post }) {
       : "text-red-600";
 
   return (
-    <div className="bg-[#0F0C1D] rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-transform border border-[#2D1B4E]">
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-transform border border-[#f1eef5]">
       <img
         src={imageUrl}
         alt={title}
@@ -24,17 +24,17 @@ export default function PostCard({ post }) {
 
       <div className="p-4">
         {/* Title */}
-        <h2 className="text-xl font-semibold mb-2 text-white">{title}</h2>
+        <h2 className="text-xl font-semibold mb-2 text-gray-600">{title}</h2>
 
         {/* Content */}
-        <p className="text-[#B4A9C8] mb-3 line-clamp-3">{content}</p>
+        <p className="text-[#706780] mb-3 line-clamp-3">{content}</p>
 
         {/* Categories */}
         <div className="flex flex-wrap gap-2 mb-3">
           {categories.map((cat) => (
             <span
               key={cat}
-              className="bg-[#5B21B6]/30 text-[#C084FC] px-2 py-1 rounded text-sm backdrop-blur-sm border border-[#5B21B6]/50"
+              className="bg-[#5B21B6]/30 text-gray-900 px-2 py-1 rounded text-sm backdrop-blur-sm border border-[#5B21B6]/50"
             >
               {cat}
             </span>
