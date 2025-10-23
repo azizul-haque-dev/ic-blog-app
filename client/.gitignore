@@ -25,6 +25,7 @@ pnpm-debug.log*
 coverage/
 
 # Cache
+.next
 .cache/
 .tmp/
 *.tmp
