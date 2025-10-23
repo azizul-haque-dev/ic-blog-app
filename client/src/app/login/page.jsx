@@ -20,8 +20,35 @@ export default function LoginPage() {
 
     try {
       // signIn logic here
-      console.log(email, password);
-      router.push("/blog");
+
+const res = await fetch (`${process.env.NEXT_PUBLIC_API_URL}/auth/login` , {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+    const data = await res.json();
+      if (!res.ok) {
+        setError(data.message || "Login failed");
+        setIsLoading(false);
+        return;
+      }
+
+  
+      
+      if (data.success) {
+        // Redirect to dashboard or home page
+        router.push("/user");
+      }
+
+     console.log(data);
+     console.log(res)
+
+
+
+
     } catch (error) {
       setError("An error occurred. Please try again.");
       setIsLoading(false);
@@ -106,6 +133,14 @@ export default function LoginPage() {
                   Forgot Password?
                 </a>
               </div>
+
+
+       {/* Error Message Display */}
+              {error && (
+                <p className="text-red-500 text-sm text-center font-medium">
+                  {error}
+                </p>
+              )}
 
               <button
                 type="submit"

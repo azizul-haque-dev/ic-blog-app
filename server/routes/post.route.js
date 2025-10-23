@@ -12,7 +12,7 @@ import upload from "../middlewares/uploadImage.js";
 import { verifyUser } from "../middlewares/verifyuser.js";
 import { isUser } from "../middlewares/roleAuth.js";
 
-import { isUser } from "../middlewares/roleAuth.js";
+
 
 const router = Router();
 

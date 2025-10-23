@@ -340,14 +340,14 @@ export const getUserAllPost = async (req, res) => {
 
 
 
-export const getUserAllPost = async (req, res) => {
-  try {
-    const posts = await getPostsByUserId(req.user.id);
-    res.status(200).json({ success: true, posts });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error." });
-  }
-};
+// export const getUserAllPost = async (req, res) => {
+//   try {
+//     const posts = await getPostsByUserId(req.user.id);
+//     res.status(200).json({ success: true, posts });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: "Internal server error." });
+//   }
+// };
 
 
 
