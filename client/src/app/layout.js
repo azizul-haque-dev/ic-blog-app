@@ -4,6 +4,8 @@ import "./globals.css";
 import Navber from "./Components/Navber";
 import { usePathname } from "next/navigation";
 
+import { AuthProvider } from "../context/AuthContext";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,7 +25,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen w-full relative overflow-hidden">
+       
+       <AuthProvider>
+         <div className="min-h-screen w-full relative overflow-hidden">
           {/* Radial Gradient Background from Bottom */}
           <div
             className="absolute inset-0 z-0"
@@ -39,6 +43,7 @@ export default function RootLayout({ children }) {
             {children}
           </div>
         </div>
+       </AuthProvider>
       </body>
     </html>
   );

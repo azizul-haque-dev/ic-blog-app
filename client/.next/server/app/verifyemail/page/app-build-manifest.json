@@ -2,14 +2,14 @@
   "pages": {
     "/verifyemail/page": [
       "static/chunks/1e749_next_f84ec86c._.js",
-      "static/chunks/[root-of-the-server]__2754da73._.js",
+      "static/chunks/[root-of-the-server]__526631af._.js",
       "static/chunks/[root-of-the-server]__21884498._.css",
       "static/chunks/client_src_app_layout_454766e3.js",
       "static/chunks/client_src_app_not-found_17957605.js",
-      "static/chunks/client_src_app_not-found_a6000cd0.js",
-      "static/chunks/1e749_next_dist_client_components_builtin_global-error_a6000cd0.js",
+      "static/chunks/client_src_app_not-found_1f57a957.js",
+      "static/chunks/1e749_next_dist_client_components_builtin_global-error_1f57a957.js",
       "static/chunks/client_src_app_verifyemail_page_jsx_969ee826._.js",
-      "static/chunks/client_src_app_verifyemail_page_jsx_a6000cd0._.js",
+      "static/chunks/client_src_app_verifyemail_page_jsx_1f57a957._.js",
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_cf9e8385._.js",
       "static/chunks/1e749_next_dist_compiled_react-dom_aa762b0f._.js",
       "static/chunks/1e749_next_dist_compiled_next-devtools_index_2bda08ad.js",
