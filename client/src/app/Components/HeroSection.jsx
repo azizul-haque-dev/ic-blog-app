@@ -4,8 +4,6 @@ import Link from "next/link";
 function HeroSection() {
   return (
     <section className="py-24 px-6 md:px-12  relative overflow-hidden">
-      {/*  Grid Background   */}
-
       {/* Content Container */}
       <div className="max-w-5xl mt-9 mx-auto text-center relative z-10">
         {/* Tagline */}
