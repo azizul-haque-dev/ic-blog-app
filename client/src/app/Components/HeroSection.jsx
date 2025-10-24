@@ -25,7 +25,8 @@ function HeroSection() {
         {/* CTA */}
         <Link
           href="/blog"
-          className="inline-block px-8 py-3 text-lg font-bold text-white bg-[#7050ff] rounded-lg hover:bg-[#5a4bcf] transition duration-300 shadow-xl">
+          className="inline-block px-8 py-3 text-lg font-bold text-white bg-[#7050ff] rounded-lg hover:bg-[#5a4bcf] transition duration-300 shadow-xl"
+        >
           Start Reading Now
         </Link>
       </div>

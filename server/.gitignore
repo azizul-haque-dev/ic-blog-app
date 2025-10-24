@@ -8,6 +8,7 @@ node_modules/
 # Build outputs
 dist/
 build/
+.next
 
 # Logs
 npm-debug.log*

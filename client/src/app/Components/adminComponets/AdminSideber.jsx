@@ -12,16 +12,11 @@ import {
 } from "react-icons/md";
 
 const sidebarItems = [
-  { name: "Dashboard", icon: <MdDashboard />, link: "/admin" },
+  { name: "Dashboard", icon: <MdDashboard />, link: "/admin/dashboard" },
   { name: "All Posts", icon: <MdPostAdd />, link: "/admin/allposts" },
-  {
-    name: "Subscriptions",
-    icon: <MdSubscriptions />,
-    link: "/admin/subscriptions",
-  },
-  { name: "Add Post", icon: <MdAddBox />, link: "/user/addPost" },
-  { name: "All Users", icon: <MdPeople />, link: "/admin/Alluser" },
-  { name: " All Comments", icon: <MdMessage />, link: "/admin/messages" },
+
+  { name: "All Users", icon: <MdPeople />, link: "/admin/allusers" },
+  { name: " All Comments", icon: <MdMessage />, link: "/admin/allcomments" },
   { name: "Home", icon: <MdHome />, link: "/" },
 ];
 

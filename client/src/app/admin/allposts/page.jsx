@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 const postsData = [
@@ -219,9 +220,8 @@ function page() {
                   className="rounded-md object-cover border border-gray-300"
                 />
               </td>
-
-              <td className="py-3 px-4 text-[#7050ff] font-medium">
-                {post.title}
+              <td className="p-2 text-blue-600 underline">
+                <Link href={`/admin/allposts/${post.id}`}>{post.title}</Link>
               </td>
 
               <td className="py-3 px-4">

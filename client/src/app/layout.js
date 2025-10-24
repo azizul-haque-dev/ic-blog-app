@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navber from "./Components/Navber";
 import { usePathname } from "next/navigation";
+import Footer from "./Components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +25,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen w-full relative overflow-hidden">
-          {/* Radial Gradient Background from Bottom */}
+          {/* Radial Gradient Background  seraui */}
           <div
             className="absolute inset-0 z-0"
             style={{
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
             {!isUserRout && !isAdminRout && <Navber />}
 
             {children}
+            {!isUserRout && !isAdminRout && <Footer />}
           </div>
         </div>
       </body>
