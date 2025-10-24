@@ -7,7 +7,7 @@ export default function PostContent({ post }) {
   //
   // bg-[#ddddf0] text-gray-200 rounded-2xl shadow-lg bg-[#aaaada]
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10 bg-white text-gray-200 rounded-2xl shadow-2xs  ">
+    <div className="max-w-4xl mx-auto mt-2 px-4 py-10 bg-white text-gray-200 rounded-2xl shadow-2xs  ">
       {/* Hero Image */}
       <div className="relative w-full h-72 rounded-2xl shadow-lg overflow-hidden">
         <img
