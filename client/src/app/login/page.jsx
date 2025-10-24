@@ -14,11 +14,11 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  // ✅ If already logged in → redirect
+  //  If already logged in → redirect
   useEffect(() => {
     if (user) {
       if (user.role === "admin") {
-        router.push("/admin");
+        router.push("/admin/dashboard");
       } else {
         router.push("/user");
       }

@@ -10,7 +10,7 @@ export default function UserProtected({ children }) {
   useEffect(() => {
     if (!isLoading) {
       if (!user) router.replace("/login");
-      else if (user.role === "admin") router.replace("/admin");
+      else if (user.role === "admin") router.replace("/admin/dashboard");
     }
   }, [user, isLoading]);
 
