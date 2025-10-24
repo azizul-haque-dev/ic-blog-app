@@ -22,21 +22,24 @@ function Navbar() {
             <li>
               <Link
                 href="/about"
-                className="text-[#3F404D] font-semibold hover:text-[#7050ff]">
+                className="text-[#3F404D] font-semibold hover:text-[#7050ff]"
+              >
                 About
               </Link>
             </li>
             <li>
               <Link
                 href="/blog"
-                className="text-[#3F404D] font-semibold hover:text-[#7050ff]">
+                className="text-[#3F404D] font-semibold hover:text-[#7050ff]"
+              >
                 Blog
               </Link>
             </li>
             <li>
               <Link
                 href="/contact"
-                className="text-[#3F404D] font-semibold hover:text-[#7050ff]">
+                className="text-[#3F404D] font-semibold hover:text-[#7050ff]"
+              >
                 Contact
               </Link>
             </li>
@@ -48,14 +51,16 @@ function Navbar() {
           {!user ? (
             <Link
               href="/login"
-              className="px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-black font-semibold text-sm sm:text-base">
+              className="px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-black font-semibold text-sm sm:text-base"
+            >
               Sign In
             </Link>
           ) : (
             <div className="dropdown dropdown-end relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="btn btn-ghost btn-circle avatar flex items-center justify-center">
+                className="btn btn-ghost btn-circle avatar flex items-center justify-center"
+              >
                 {user.image ? (
                   <Image
                     src={user.image}
@@ -83,7 +88,8 @@ function Navbar() {
                     <button
                       onClick={() => {
                         console.log("Logout clicked");
-                      }}>
+                      }}
+                    >
                       Logout
                     </button>
                   </li>

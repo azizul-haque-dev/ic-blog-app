@@ -8,7 +8,10 @@ node_modules/
 # Build outputs
 dist/
 build/
-.next
+
+# next 
+/.next/
+/out/
 
 # Logs
 npm-debug.log*
@@ -25,6 +28,7 @@ pnpm-debug.log*
 coverage/
 
 # Cache
+.next
 .cache/
 .tmp/
 *.tmp
