@@ -1,26 +1,16 @@
 "use client";
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import {
-  MoreVertical,
-  ThumbsUp,
-  ThumbsDown,
-  FileText,
-  Users,
-  MessageSquare,
-} from "lucide-react";
+import { MoreVertical, ThumbsUp, ThumbsDown, FileText } from "lucide-react";
 import Card from "@/app/Components/userComponents/card";
 
 const Dashboard = () => {
   const [user, setUser] = useState({});
   const [editProfile, setEditProfile] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  const [totalLike, setTotalLike] = useState(120);
-  const [totalUser, setTotalUser] = useState(45);
-  const [totalDislike, setTotalDislike] = useState(18);
-  const [totalPost, setTotalPost] = useState(25);
-  const [totalComments, setTotalComments] = useState(60);
-  const [loading, setloading] = useState(false);
+  const [totalLike, setTotalLike] = useState(0);
+  const [totalDislike, setTotalDislike] = useState(0);
+  const [totalPost, setTotalPost] = useState(0);
   const fileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
@@ -32,30 +22,24 @@ const Dashboard = () => {
     }
   };
 
-  const EditeUsers = (e) => {};
-
   return (
-    <div className="flex flex-col min-h-screen text-gray-800">
-      {/* Header text */}
+    <div className="flex flex-col min-h-screen  text-gray-800">
+      {/* Header Section */}
       <main className="flex-1 p-10">
-        <h2 className="text-3xl text-white font-semibold mb-8">
-          Admin Dashboard
-        </h2>
+        <h2 className="text-3xl font-semibold mb-8">User Dashboard</h2>
 
-        {/* Profile and email name  */}
+        {/* Profile Section */}
         <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <Image
-              src={imagePreview || "/defaultProfile.png"}
+              src="/defaultProfile.png"
               alt="Profile Picture"
               width={80}
               height={80}
               className="rounded-full border border-gray-200"
             />
             <div>
-              <h3 className="text-2xl font-semibold text-[#7050ff]">
-                John Doe
-              </h3>
+              <h3 className="text-2xl font-semibold text-[#7050ff]">John</h3>
               <p className="text-lg text-gray-500">john@gmail.com</p>
             </div>
           </div>
@@ -67,14 +51,8 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/*  Cards */}
+        {/* Stats Cards  */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          <Card
-            title="Total Users"
-            value={totalUser}
-            icon={Users}
-            color="bg-blue-500"
-          />
           <Card
             title="Total Likes"
             value={totalLike}
@@ -92,12 +70,6 @@ const Dashboard = () => {
             value={totalPost}
             icon={FileText}
             color="bg-[#7050ff]"
-          />
-          <Card
-            title="Total Comments"
-            value={totalComments}
-            icon={MessageSquare}
-            color="bg-yellow-500"
           />
         </div>
       </main>
@@ -139,14 +111,14 @@ const Dashboard = () => {
                 />
               </div>
 
-              {/* Edite from */}
+              {/* Form Inputs */}
               <div>
                 <label className="block text-gray-700">Name</label>
                 <input
                   type="text"
                   required
                   className="w-full p-2 border border-gray-300 focus:ring-2 focus:ring-[#7050ff] outline-none rounded mt-1"
-                  defaultValue={user.name || "John Doe"}
+                  defaultValue={user.name || "John"}
                 />
               </div>
               <div>
@@ -168,7 +140,6 @@ const Dashboard = () => {
                 </button>
                 <button
                   type="submit"
-                  onClick={EditeUsers}
                   className="px-4 py-2 bg-[#7050ff] text-white rounded hover:bg-[#5931d1]">
                   Save
                 </button>
@@ -182,16 +153,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-import React from "react";
-import AdminDashboard from "./AdminDashboard";
-import AdminProtected from "../../Components/auth/AdminProtected";
-
-export default function AdminDashboardPage() {
-  return (
-    <AdminProtected>
-      <AdminDashboard />
-    </AdminProtected>
-  );
-}

@@ -5,6 +5,8 @@ import Navber from "./Components/Navber";
 import { usePathname } from "next/navigation";
 import Footer from "./Components/Footer";
 
+import { AuthProvider } from "../context/AuthContext";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,6 +28,10 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen w-full relative overflow-hidden">
           {/* Radial Gradient Background  seraui */}
+       
+       <AuthProvider>
+         <div className="min-h-screen w-full relative overflow-hidden">
+          {/* Radial Gradient Background from Bottom */}
           <div
             className="absolute inset-0 z-0"
             style={{
@@ -41,6 +47,7 @@ export default function RootLayout({ children }) {
             {!isUserRout && !isAdminRout && <Footer />}
           </div>
         </div>
+       </AuthProvider>
       </body>
     </html>
   );
