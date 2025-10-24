@@ -9,6 +9,8 @@ node_modules/
 dist/
 build/
 .next
+/.next/
+/out/
 
 # Logs
 npm-debug.log*
