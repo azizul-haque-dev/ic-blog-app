@@ -62,7 +62,7 @@ export default function PostCard({ post }) {
 
       {/* Read More Button */}
       <div className="flex justify-end mx-4 my-4">
-        <Link href={`/post/${post.id}`}>
+        <Link href={`/post/${post._id}`}>
           <button className="bg-gradient-to-r from-[#6D28D9] to-[#7C3AED] text-white text-sm font-medium px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out cursor-pointer">
             Read More →
           </button>

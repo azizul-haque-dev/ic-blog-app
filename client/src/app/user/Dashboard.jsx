@@ -1,24 +1,38 @@
 "use client";
-import React, { useRef, useState } from "react";
-import Image from "next/image";
-import { MoreVertical, ThumbsUp, ThumbsDown, FileText } from "lucide-react";
 import Card from "@/app/Components/userComponents/card";
+import { useAuth } from "@/context/AuthContext";
+import { FileText, MoreVertical, ThumbsDown, ThumbsUp } from "lucide-react";
+import Image from "next/image";
+import { useRef, useState } from "react";
 
 const Dashboard = () => {
-  const [user, setUser] = useState({});
+  const { user } = useAuth();
   const [editProfile, setEditProfile] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [totalLike, setTotalLike] = useState(0);
   const [totalDislike, setTotalDislike] = useState(0);
   const [totalPost, setTotalPost] = useState(0);
   const fileInputRef = useRef(null);
+  console.log(user, "user");
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/upload/avater`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          body: formData
+        }
+      );
+      const data = await res.json();
+      console.log({ data });
     }
   };
 
@@ -32,21 +46,24 @@ const Dashboard = () => {
         <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-6">
             <Image
-              src="/defaultProfile.png"
+              src={user?.avatarUrl || "/defaultProfile.png"}
               alt="Profile Picture"
               width={80}
               height={80}
               className="rounded-full border border-gray-200"
             />
             <div>
-              <h3 className="text-2xl font-semibold text-[#7050ff]">John</h3>
-              <p className="text-lg text-gray-500">john@gmail.com</p>
+              <h3 className="text-2xl font-semibold text-[#7050ff]">
+                {user.name}
+              </h3>
+              <p className="text-lg text-gray-500">{user.email}</p>
             </div>
           </div>
 
           <div
             onClick={() => setEditProfile(true)}
-            className="cursor-pointer hover:bg-gray-100 p-2 rounded-full transition">
+            className="cursor-pointer hover:bg-gray-100 p-2 rounded-full transition"
+          >
             <MoreVertical className="w-6 h-6 text-gray-600 hover:text-[#7050ff]" />
           </div>
         </div>
@@ -87,7 +104,8 @@ const Dashboard = () => {
               <div className="text-center mb-6">
                 <div
                   onClick={() => fileInputRef.current.click()}
-                  className="cursor-pointer group relative w-24 h-24 mx-auto rounded-full border border-gray-300 overflow-hidden bg-gray-100 flex items-center justify-center">
+                  className="cursor-pointer group relative w-24 h-24 mx-auto rounded-full border border-gray-300 overflow-hidden bg-gray-100 flex items-center justify-center"
+                >
                   {imagePreview ? (
                     <img
                       src={imagePreview}
@@ -135,12 +153,14 @@ const Dashboard = () => {
                 <button
                   type="button"
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-                  onClick={() => setEditProfile(false)}>
+                  onClick={() => setEditProfile(false)}
+                >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#7050ff] text-white rounded hover:bg-[#5931d1]">
+                  className="px-4 py-2 bg-[#7050ff] text-white rounded hover:bg-[#5931d1]"
+                >
                   Save
                 </button>
               </div>
