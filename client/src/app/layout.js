@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navber from "./Components/Navber";
 import { usePathname } from "next/navigation";
+import Footer from "./Components/Footer";
 
 import { AuthProvider } from "../context/AuthContext";
 
@@ -25,6 +26,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <div className="min-h-screen w-full relative overflow-hidden">
+          {/* Radial Gradient Background  seraui */}
        
        <AuthProvider>
          <div className="min-h-screen w-full relative overflow-hidden">
@@ -41,6 +44,7 @@ export default function RootLayout({ children }) {
             {!isUserRout && !isAdminRout && <Navber />}
 
             {children}
+            {!isUserRout && !isAdminRout && <Footer />}
           </div>
         </div>
        </AuthProvider>

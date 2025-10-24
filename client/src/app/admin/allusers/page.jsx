@@ -80,7 +80,7 @@ function Page() {
     console.log("Make Admin:", id);
     setOpenMenu(null);
   };
-  // Suspend / Activate here
+  // Suspend Activate here
   const handleToggleStatus = (id) => {
     console.log("Toggle Status:", id);
     setOpenMenu(null);
