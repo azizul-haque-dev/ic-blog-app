@@ -29,7 +29,6 @@ coverage/
 
 # Cache
 .next
-.cache/
 .tmp/
 *.tmp
 *.log

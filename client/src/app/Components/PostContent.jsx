@@ -2,8 +2,8 @@ import Link from "next/link";
 import CommentCard from "./CommentCard";
 
 export default function PostContent({ post }) {
-  const likeCount = post.likes.length;
-  const dislikeCount = post.dislikes.length;
+  const likeCount = post.likes?.length || 0;
+  const dislikeCount = post.dislikes?.length || 0;
   //
   // bg-[#ddddf0] text-gray-200 rounded-2xl shadow-lg bg-[#aaaada]
   return (
@@ -11,12 +11,12 @@ export default function PostContent({ post }) {
       {/* Hero Image */}
       <div className="relative w-full h-72 rounded-2xl shadow-lg overflow-hidden">
         <img
-          src={post.imageUrl}
+          src={post?.imageUrl}
           alt={post.title}
           className="object-cover w-full h-full"
         />
         <div className="absolute bottom-3 left-3 flex gap-2 flex-wrap">
-          {post.categories.map((cat) => (
+          {post.categories?.map((cat) => (
             <span
               key={cat}
               className="bg-purple-700/90 text-white text-sm px-3 py-1 rounded-full"
@@ -37,7 +37,7 @@ export default function PostContent({ post }) {
             {new Date(post.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
-              day: "numeric",
+              day: "numeric"
             })}
           </span>
         </p>
@@ -47,7 +47,7 @@ export default function PostContent({ post }) {
             {new Date(post.updatedAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
-              day: "numeric",
+              day: "numeric"
             })}
           </span>
         </p>
@@ -75,7 +75,7 @@ export default function PostContent({ post }) {
       >
         Status: {post.status}
       </p> */}
-      <CommentCard />
+      <CommentCard comments={post?.comments} />
       {/* Back Button */}
       <div className="mt-10">
         <Link

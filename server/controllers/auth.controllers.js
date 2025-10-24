@@ -3,8 +3,10 @@ import { z } from "zod";
 import { UserModel } from "../models/user.models.js";
 import { sendEmail } from "../services/sendEmail.js";
 import {
+  generateAccessToken,
+  generateRefreshToken,
   generateVerifyEmailToken,
-  verifyEmailToken, generateAccessToken, generateRefreshToken
+  verifyEmailToken
 } from "../services/token.services.js";
 
 import { validatePassword } from "../services/auth.services.js";
@@ -149,12 +151,9 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-
-
-
 const loginUser = async (req, res) => {
   try {
-    //  Validate request body 
+    //  Validate request body
     const parseBody = loginSchema.safeParse(req.body);
     if (!parseBody.success) {
       return res
@@ -175,7 +174,7 @@ const loginUser = async (req, res) => {
     if (!user.isVerified) {
       return res.status(403).json({
         success: false,
-        message: "Please verify your email before logging in.",
+        message: "Please verify your email before logging in."
       });
     }
 
@@ -183,7 +182,7 @@ const loginUser = async (req, res) => {
     if (user.status !== "approved") {
       return res.status(403).json({
         success: false,
-        message: `Your account status is: ${user.status}. Please contact support.`,
+        message: `Your account status is: ${user.status}. Please contact support.`
       });
     }
 
@@ -201,34 +200,33 @@ const loginUser = async (req, res) => {
 
     // Set tokens in secure, httpOnly cookies
     const cookieOptions = {
-            httpOnly: true,
+      httpOnly: true,
       secure: false,
-      sameSite: "lax",
+      sameSite: "lax"
     };
 
     res.cookie("accessToken", accessToken, {
       ...cookieOptions,
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      maxAge: 15 * 60 * 1000 // 15 minutes
     });
 
     res.cookie("refreshToken", refreshToken, {
       ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
-  
     const userData = {
       id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
+      avatarUrl: user.avatarUrl
     };
-
 
     return res.status(200).json({
       success: true,
       message: "Logged in successfully",
-      user: userData,
+      user: userData
     });
   } catch (error) {
     console.error("Error logging in user:", error);
@@ -241,12 +239,12 @@ const loginUser = async (req, res) => {
 const logoutUser = (req, res) => {
   try {
     const cookieOptions = {
-      httpOnly: true,
+      httpOnly: true
     };
 
-    // Clear both cookies 
-    res.clearCookie("accessToken")
-    res.clearCookie("refreshToken")
+    // Clear both cookies
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
 
     return res
       .status(200)
@@ -259,4 +257,4 @@ const logoutUser = (req, res) => {
   }
 };
 
-export { registerUser, verifyEmail, loginUser, logoutUser };
+export { loginUser, logoutUser, registerUser, verifyEmail };

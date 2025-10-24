@@ -2,8 +2,17 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ["via.placeholder.com"],
-  },
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com"
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com"
+      }
+    ]
+  }
 };
 
 export default nextConfig;

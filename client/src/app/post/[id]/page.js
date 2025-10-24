@@ -1,12 +1,14 @@
-import { posts } from "@/app/damyData/post-damyData";
-
 import PostContent from "@/app/Components/PostContent";
 
 export default async function PostDetails({ params }) {
-  const resolvedParams = await params; // await kore nite hobe
-  const id = Number(resolvedParams.id);
+  const { id } = await params;
 
-  const post = posts.find((p) => p.id === id);
+  const res = await fetch(`${process.env.NEXT_API_URL}/post/get/${id}`, {
+    cache: "no-store"
+  });
+  const post = await res.json();
+  console.log(id, post);
+  // const post = posts.find((p) => p.id === id);
 
   if (!post) {
     return (
@@ -15,5 +17,5 @@ export default async function PostDetails({ params }) {
       </div>
     );
   }
-  return <PostContent post={post} />;
+  return <PostContent post={post.post} />;
 }

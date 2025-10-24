@@ -1,25 +1,10 @@
 "use client";
 
-import { comments } from "../damyData/post-damyData";
-
-export default function CommentCard() {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "approved":
-        return "text-green-500 bg-green-100 dark:bg-green-800/70";
-      case "pending":
-        return "text-yellow-500 bg-yellow-100 dark:bg-yellow-800/70";
-      case "suspended":
-        return "text-red-500 bg-red-100 dark:bg-red-800/70";
-      default:
-        return "text-gray-500 bg-gray-100 dark:bg-gray-800";
-    }
-  };
-
+export default function CommentCard({ comments }) {
   return (
     <section className="max-w-3xl mx-auto py-8 px-4 ">
       <h2 className="text-2xl font-bold mb-5 dark:text-gray-600">
-        Comments ({comments.length})
+        Comments ({comments?.length})
       </h2>
 
       <div className="space-y-4 ">

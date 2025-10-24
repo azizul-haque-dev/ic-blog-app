@@ -1,7 +1,6 @@
 import PostCard from "../Components/PostCard";
-import { posts } from "../damyData/post-damyData";
 
-function BlogPost() {
+async function BlogPost({ posts }) {
   return (
     <div
       className="min-h-screen 
@@ -13,7 +12,7 @@ function BlogPost() {
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post._id} post={post} />
         ))}
       </div>
     </div>
