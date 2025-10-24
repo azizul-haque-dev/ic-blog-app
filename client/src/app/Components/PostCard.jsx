@@ -6,6 +6,7 @@ export default function PostCard({ post }) {
     return null;
   }
   const { title, content, imageUrl, categories, status, createdAt } = post;
+  if (post.status !== "approved") return false;
   const statusColor =
     status === "approved"
       ? "text-green-600"
@@ -55,7 +56,7 @@ export default function PostCard({ post }) {
           </span>
 
           <span className="inline-block border border-[#7C3AED] text-[#C084FC] px-2 py-0.5 rounded-full text-xs font-medium">
-            {createdAt}
+            {new Date(createdAt).toLocaleString("en-BD")}
           </span>
         </div>
       </div>
