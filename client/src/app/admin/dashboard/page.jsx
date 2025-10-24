@@ -1,7 +1,13 @@
+
+
 import React from "react";
+import AdminDashboard from "./AdminDashboard";
+import AdminProtected from "../../Components/auth/AdminProtected";
 
-function page() {
-  return <div>page</div>;
+export default function AdminDashboardPage() {
+  return (
+    <AdminProtected>
+      <AdminDashboard />
+    </AdminProtected>
+  );
 }
-
-export default page;

@@ -16,8 +16,35 @@ const Page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    try 
+    
+    { 
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({name,email,password})
+    
+      })
+      const data = await res.json()
 
-    try {
+
+console.log("Response" ,res)
+      console.log("Data" , data)
+
+if(!res.ok) {
+  setErrorMessage(data.message || "Registration Failed")
+  
+
+
+setIsLoading(false)
+return
+}
+
+
+
       router.push("/verifyemail");
     } catch (error) {
       setErrorMessage(error.message);
