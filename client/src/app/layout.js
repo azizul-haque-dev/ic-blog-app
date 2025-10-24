@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen w-full relative overflow-hidden">
+        {/* <div className="min-h-screen w-full relative overflow-hidden"> */}
           {/* Radial Gradient Background  seraui */}
        
        <AuthProvider>
