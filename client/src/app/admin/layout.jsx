@@ -1,4 +1,4 @@
-"use client";
+
 import Sidebar from "@/app/Components/adminComponets/AdminSideber";
 
 export default function Layout({ children }) {
