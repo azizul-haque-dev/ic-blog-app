@@ -9,6 +9,7 @@ const EnterVerificationCode = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(120);
+  const [success, setSuccess] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -32,22 +33,62 @@ const EnterVerificationCode = () => {
     setLoading(true);
     setError("");
 
-    try {
-      // API call to verify the code
 
-      router.push("/login");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-email`, {
+        method: "POST",
+        credentials: "include", // Sends cookies (like your emailToken)
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Handle failed verification
+        switch (res.status) {
+          case 401:
+            if (data.message === "Token expired") {
+              setError("Verification code has expired. Please request a new one.");
+            } else if (data.message === "Invalid code") {
+              setError("Invalid verification code. Please try again.");
+            } else {
+              setError("Session expired. Please register again.");
+              // Replaced router.push with window.location.href
+              setTimeout(() => (window.location.href = "/register"), 3000);
+            }
+            break;
+          default:
+            setError(data.message || "Verification failed. Please try again.");
+        }
+      } else {
+        // --- FIX: Handle SUCCESSFUL verification ---
+        // This logic now only runs if res.ok is true
+        setSuccess("Verification successful! Redirecting to login...");
+        setTimeout(() => {
+          // Replaced router.push with window.location.href
+        router.push("/login");
+        }, 3000);
+      }
     } catch (err) {
-      setError("Something went wrong. Try again later.");
+      setError("Something went wrong. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
+
+
+
   };
 
   const handleChange = (e) => {
     const input = e.target.value;
-    if (/^\d{0,6}$/.test(input)) {
-      setCode(input);
-    }
+    // if (/^\d{0,6}$/.test(input)) {
+    //   setCode(input);
+    // }
+setCode(input)
+  
   };
 
   return (
@@ -77,8 +118,8 @@ const EnterVerificationCode = () => {
           <form onSubmit={handleVerify} className="space-y-6">
             <input
               type="text"
-              inputMode="numeric"
-              pattern="\d{6}"
+              // inputMode="numeric"
+              // pattern="\d{6}"
               maxLength={6}
               placeholder="••••••"
               value={code}
@@ -105,6 +146,12 @@ const EnterVerificationCode = () => {
                 </span>{" "}
                 to get a new one.
               </p>
+            )}
+
+
+         {/* Success Message */}
+            {success && (
+              <p className="text-green-600 text-sm text-center font-medium">{success}</p>
             )}
 
             {error && (

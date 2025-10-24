@@ -6,18 +6,18 @@ export default function CommentCard() {
   const getStatusColor = (status) => {
     switch (status) {
       case "approved":
-        return "text-green-500 bg-green-100 dark:bg-green-900/30";
+        return "text-green-500 bg-green-100 dark:bg-green-800/70";
       case "pending":
-        return "text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30";
+        return "text-yellow-500 bg-yellow-100 dark:bg-yellow-800/70";
       case "suspended":
-        return "text-red-500 bg-red-100 dark:bg-red-900/30";
+        return "text-red-500 bg-red-100 dark:bg-red-800/70";
       default:
         return "text-gray-500 bg-gray-100 dark:bg-gray-800";
     }
   };
 
   return (
-    <section className="max-w-3xl mx-auto py-8 px-4">
+    <section className="max-w-3xl mx-auto py-8 px-4 ">
       <h2 className="text-2xl font-bold mb-5 dark:text-gray-600">
         Comments ({comments.length})
       </h2>
@@ -42,7 +42,7 @@ export default function CommentCard() {
               >
                 {comment.status}
               </span>
-              <span className="text-gray-500 dark:text-gray-400">
+              <span className="text-gray-600 dark:text-gray-600">
                 {new Date(comment.createdAt).toLocaleDateString()}
               </span>
             </div>

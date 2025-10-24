@@ -84,8 +84,8 @@ const registerUser = async (req, res) => {
     await user.save();
     res.cookie("emailToken", emailToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
       maxAge: 5 * 60 * 1000
     });
     return res.status(201).json({
@@ -201,7 +201,9 @@ const loginUser = async (req, res) => {
 
     // Set tokens in secure, httpOnly cookies
     const cookieOptions = {
-      httpOnly: true,
+            httpOnly: true,
+      secure: false,
+      sameSite: "lax",
     };
 
     res.cookie("accessToken", accessToken, {
