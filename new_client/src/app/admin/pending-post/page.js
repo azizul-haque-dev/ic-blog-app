@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Check, X, Ban } from "lucide-react";
 
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 const postsData = [
@@ -227,20 +228,17 @@ function PendigPostPage() {
               <td className="py-3 px-4">
                 <div className="flex gap-2">
                   <button
-                   
                     title="Delete post"
                     aria-label={`Delete ${post.title}`}
-                    className="inline-flex items-center gap-1 px-3 py-1.5   text-black text-sm font-medium rounded-md  focus:outline-none ">
-                approve
+                    className="inline-flex items-center gap-1 px-3 py-1.5   text-[#3ab855] text-sm font-medium rounded-md  focus:outline-none ">
+                    <Check />
                   </button>
                   <button
-                   
                     title="Delete post"
                     aria-label={`Delete ${post.title}`}
-                    className="inline-flex items-center gap-1 px-3 py-1.5   text-black text-sm font-medium rounded-md  focus:outline-none ">
-                suspend
+                    className="inline-flex items-center gap-1 px-3 py-1.5   text-[#bb4f4f] text-sm font-medium rounded-md  focus:outline-none ">
+                    <Ban />
                   </button>
-                  
                 </div>
               </td>
             </tr>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, SquarePen } from "lucide-react";
 
 export default function EditProfileModal({ user }) {
   const [editProfile, setEditProfile] = useState(false);
@@ -17,11 +17,14 @@ export default function EditProfileModal({ user }) {
       const formData = new FormData();
       formData.append("avatar", file);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/upload/avater`, {
-        method: "PATCH",
-        credentials: "include",
-        body: formData,
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/upload/avater`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          body: formData,
+        }
+      );
       const data = await res.json();
       console.log({ data });
     }
@@ -32,9 +35,8 @@ export default function EditProfileModal({ user }) {
       {/* More Button */}
       <div
         onClick={() => setEditProfile(true)}
-        className="cursor-pointer hover:bg-gray-100 p-2 rounded-full transition"
-      >
-        <MoreVertical className="w-6 h-6 text-gray-600 hover:text-[#7050ff]" />
+        className="cursor-pointer hover:bg-gray-100 p-2 rounded-full transition">
+        <SquarePen className="w-6 h-6 text-gray-600 hover:text-[#7050ff]" />
       </div>
 
       {/* Edit Modal */}
@@ -50,8 +52,7 @@ export default function EditProfileModal({ user }) {
               <div className="text-center mb-6">
                 <div
                   onClick={() => fileInputRef.current.click()}
-                  className="cursor-pointer group relative w-24 h-24 mx-auto rounded-full border border-gray-300 overflow-hidden bg-gray-100 flex items-center justify-center"
-                >
+                  className="cursor-pointer group relative w-24 h-24 mx-auto rounded-full border border-gray-300 overflow-hidden bg-gray-100 flex items-center justify-center">
                   {imagePreview ? (
                     <img
                       src={imagePreview}
@@ -100,14 +101,12 @@ export default function EditProfileModal({ user }) {
                 <button
                   type="button"
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-                  onClick={() => setEditProfile(false)}
-                >
+                  onClick={() => setEditProfile(false)}>
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#7050ff] text-white rounded hover:bg-[#5931d1]"
-                >
+                  className="px-4 py-2 bg-[#7050ff] text-white rounded hover:bg-[#5931d1]">
                   Save
                 </button>
               </div>

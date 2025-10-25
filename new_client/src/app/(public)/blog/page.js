@@ -9,7 +9,7 @@ export default function BlogPage() {
     "Health",
     "Education",
     "Business",
-    "Programming"
+    "Programming",
   ];
 
   const totalPages = 5;
@@ -18,27 +18,34 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen text-white p-4">
       {/* Category & Search UI */}
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-6 items-center">
-        <div>
-
-        
-        <input
-          type="text"
-          placeholder="Search posts..."
-          className="px-3 py-2 text-black rounded w-full md:w-1/3"
-        />
-        <button className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600">
-          Search
-        </button>
+      <div className="mx-auto max-w-7xl mt-10 flex gap-5 flex-col  md:flex-row lg:flex-row justify-between ">
+        {/* Left: Search Input + Button */}
+        <div className="w-full flex gap-3 ">
+          <input
+            type="text"
+            placeholder="Search posts..."
+            className="border border-[#f7f6ff] rounded p-2 outline-0 "
+          />
+          <button
+            type="submit"
+            className="bg-white rounded px-5  font-semibold text-[#7050ff]">
+            Search
+          </button>
         </div>
-        <select className="px-3 py-2 text-black rounded w-full md:w-1/4">
-          <option value="">All Categories</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+
+        {/* Right: Category Dropdown */}
+        <div className="w-full md:w-1/4">
+          <select className="w-full px-4 py-2 font-semibold text-center bg-[#7567b4] text-white  rounded-lg shadow-sm  transition duration-200">
+            <option className="" value="">
+              All Categories
             </option>
-          ))}
-        </select>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Blog Posts */}

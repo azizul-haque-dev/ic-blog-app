@@ -8,6 +8,7 @@ import {
   FileText,
   Users,
   MessageSquare,
+  SquarePen,
 } from "lucide-react";
 import Card from "@/app/Components/userComponents/card";
 
@@ -63,7 +64,7 @@ const AdminDashboard = () => {
           <div
             onClick={() => setEditProfile(true)}
             className="cursor-pointer hover:bg-gray-100 p-2 rounded-full transition">
-            <MoreVertical className="w-6 h-6 text-gray-600 hover:text-[#7050ff]" />
+            <SquarePen className="w-6 h-6 text-gray-600 hover:text-[#7050ff]" />
           </div>
         </div>
 

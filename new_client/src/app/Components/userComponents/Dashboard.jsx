@@ -1,7 +1,6 @@
-
 import Card from "@/app/Components/userComponents/card";
 import EditProfileModal from "@/app/Components/userComponents/EditProfileModal";
-import { FileText, ThumbsDown, ThumbsUp } from "lucide-react";
+import { FileText, ThumbsDown, ThumbsUp, SquarePen } from "lucide-react";
 import Image from "next/image";
 
 const UserDashBoard = () => {
@@ -40,9 +39,24 @@ const UserDashBoard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          <Card title="Total Likes" value={totalLike} icon={ThumbsUp} color="bg-green-500" />
-          <Card title="Total Dislikes" value={totalDislike} icon={ThumbsDown} color="bg-red-500" />
-          <Card title="Total Posts" value={totalPost} icon={FileText} color="bg-[#7050ff]" />
+          <Card
+            title="Total Likes"
+            value={totalLike}
+            icon={ThumbsUp}
+            color="bg-green-500"
+          />
+          <Card
+            title="Total Dislikes"
+            value={totalDislike}
+            icon={ThumbsDown}
+            color="bg-red-500"
+          />
+          <Card
+            title="Total Posts"
+            value={totalPost}
+            icon={FileText}
+            color="bg-[#7050ff]"
+          />
         </div>
       </main>
     </div>

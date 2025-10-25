@@ -2,8 +2,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { SquarePen } from "lucide-react";
 
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Button from "./../../Components/button";
 const postsData = [
   {
     id: 1,
@@ -171,6 +173,8 @@ function page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
+  const handleEdite = () => {};
+
   // Delete functions here
   const handleDelete = (post) => {
     setSelectedPost(post);
@@ -232,6 +236,13 @@ function page() {
                     aria-label={`Delete ${post.title}`}
                     className="inline-flex items-center gap-1 px-3 py-1.5   text-white text-sm font-medium rounded-md  focus:outline-none ">
                     <TrashIcon className="w-4 text-gray-600 hover:text-[#7050ff] h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleEdite(post)}
+                    title="Edit post"
+                    aria-label={`Delete ${post.title}`}
+                    className="inline-flex items-center gap-1 px-3 py-1.5   text-white text-sm font-medium rounded-md  focus:outline-none ">
+                    <SquarePen className="w-4 text-gray-600 hover:text-[#7050ff] h-4" />
                   </button>
                 </div>
               </td>
