@@ -6,12 +6,7 @@ export default function PostCard({ post }) {
     return null;
   }
   const { title, content, imageUrl, categories, status, createdAt } = post;
-  const statusColor =
-    status === "approved"
-      ? "text-green-600"
-      : status === "pending"
-      ? "text-yellow-500"
-      : "text-red-600";
+ 
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-transform border border-[#f1eef5]">
@@ -42,17 +37,7 @@ export default function PostCard({ post }) {
 
         {/* Status & Date */}
         <div className="flex justify-between items-center">
-          <span
-            className={`text-sm font-medium ${
-              status === "approved"
-                ? "text-[#10B981]"
-                : status === "pending"
-                ? "text-[#FACC15]"
-                : "text-[#EF4444]"
-            }`}
-          >
-            Status: {status}
-          </span>
+         
 
           <span className="inline-block border border-[#7C3AED] text-[#C084FC] px-2 py-0.5 rounded-full text-xs font-medium">
             {createdAt}

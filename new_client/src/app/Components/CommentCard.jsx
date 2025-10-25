@@ -1,12 +1,12 @@
 
-export default function CommentCard({ comments }) {
+export default function CommentCard({ comments,isAdmin }) {
   return (
     <section className="max-w-3xl mx-auto py-8 px-4 ">
       <h2 className="text-2xl font-bold mb-5 dark:text-gray-600">
         Comments ({comments?.length})
       </h2>
 
-      <div className="space-y-4 ">
+      <div className="space-y-4 shadow-lg ">
         {comments.map((comment) => (
           <div
             key={comment._id}
@@ -24,6 +24,18 @@ export default function CommentCard({ comments }) {
               >
               {new Date(comment.createdAt).toLocaleDateString()}
               </span>
+
+   {isAdmin && (
+  <div className="flex gap-4 mt-4">
+    <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition">
+      Suspend
+    </button>
+    <button className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
+      Delete
+    </button>
+  </div>
+)}
+
               
             </div>
           </div>

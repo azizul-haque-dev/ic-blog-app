@@ -5,11 +5,7 @@ export default async function PostDetails({ params }) {
   const { id } = await params;
 
 
-  // const res = await fetch(`${process.env.NEXT_API_URL}/post/get/${id}`, {
-  //   cache: "no-store"
-  // });
-  // const post = await res.json();
-  // console.log(id, post);
+
   const post = posts.find((p) =>{
  return p._id ==id
   });
