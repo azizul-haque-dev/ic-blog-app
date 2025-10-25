@@ -1,0 +1,15 @@
+import LoginComponent from '@/app/Components/auth/login/LoginComponent'
+import LoginForm from '@/app/Components/auth/login/LoginForm'
+import React from 'react'
+
+function LoginPage() {
+  return (
+    <>
+    <LoginComponent>
+      <LoginForm/>
+    </LoginComponent>
+    </>
+  )
+}
+
+export default LoginPage
