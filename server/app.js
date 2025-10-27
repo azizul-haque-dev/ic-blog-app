@@ -39,6 +39,19 @@ app.use("/api/post", postRoutes);
 // comment route
 app.use("/api/posts/:postId/comments", commentRoutes);
 
+app.get("/api/get/user", (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  const refreshToken = req.cookies.refreshToken;
+  if (!accessToken) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const decoded = jwt.verify(accessToken, process.env.ACCESS_SECRET);
+    res.json({ success: true, user: decoded, accessToken, refreshToken });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+});
+
 app.use((err, req, res, next) => {
   console.error(err.stack, "error via middleware");
   if (process.env.NODE_ENV === "development") {

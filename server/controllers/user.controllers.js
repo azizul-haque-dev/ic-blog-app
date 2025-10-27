@@ -133,13 +133,10 @@ const uploadAvatar = async (req, res) => {
   }
 };
 
-
-
-export const getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res) => {
   try {
-
     const userId = req.user.id;
-
+    console.log;
 
     const user = await UserModel.findById(userId).select(
       "-password -emailVerificationToken -verificationTokenExpireAt -resetPasswordToken -resetPasswordExpires"
@@ -148,23 +145,20 @@ export const getUserProfile = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User not found." });
+        .json({ success: false, message: "User not found for profile." });
     }
-
 
     res.status(200).json({
       success: true,
-      user,
+      user
     });
   } catch (error) {
     console.error("Get User Profile Error:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error. Please try again later." });
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later."
+    });
   }
 };
 
-
-
-
-export { forgetPassword, resetPassword, uploadAvatar };
+export { forgetPassword, getUserProfile, resetPassword, uploadAvatar };

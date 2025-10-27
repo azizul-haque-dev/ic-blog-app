@@ -2,16 +2,21 @@ import jwt from "jsonwebtoken";
 
 export function generateAccessToken(payload) {
   try {
-    return jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "15m" });
+    const token = jwt.sign(payload, process.env.ACCESS_SECRET, {
+      expiresIn: "1d"
+    });
+    return token;
   } catch (error) {
     console.error("Error generating access token:", error);
     throw new Error("Failed to generate access token");
   }
 }
 
-export function generateRefreshToken(payload) {
+export function generateRefreshToken(userId) {
   try {
-    return jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "7d" });
+    return jwt.sign({ userId }, process.env.REFRESH_SECRET, {
+      expiresIn: "7d"
+    });
   } catch (error) {
     console.error("Error generating refresh token:", error);
     throw new Error("Failed to generate refresh token");
