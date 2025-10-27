@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Timer from "./Timer";
 
 export default function VerifyEmailForm() {
@@ -18,12 +18,15 @@ export default function VerifyEmailForm() {
     setError("");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/verify-email`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verify-email`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code })
+        }
+      );
 
       const data = await res.json();
 
@@ -31,7 +34,9 @@ export default function VerifyEmailForm() {
         switch (res.status) {
           case 401:
             if (data.message === "Token expired") {
-              setError("Verification code has expired. Please request a new one.");
+              setError(
+                "Verification code has expired. Please request a new one."
+              );
             } else if (data.message === "Invalid code") {
               setError("Invalid verification code. Please try again.");
             } else {
@@ -47,7 +52,9 @@ export default function VerifyEmailForm() {
         setTimeout(() => router.push("/login"), 3000);
       }
     } catch (err) {
-      setError("Something went wrong. Please check your connection and try again.");
+      setError(
+        "Something went wrong. Please check your connection and try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -73,7 +80,11 @@ export default function VerifyEmailForm() {
 
       <Timer timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
 
-      {success && <p className="text-green-600 text-sm text-center font-medium">{success}</p>}
+      {success && (
+        <p className="text-green-600 text-sm text-center font-medium">
+          {success}
+        </p>
+      )}
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
       <button

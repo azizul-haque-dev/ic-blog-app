@@ -1,7 +1,11 @@
-"use client";
+import { getUser } from "@/actions/user.action";
 import Sidebar from "@/app/Components/userComponents/Sideber";
+import { redirect } from "next/navigation";
 
-export default function Layout({ children }) {
+export default async function Layout({ children }) {
+  const { user } = await getUser();
+  console.log(user, "from user layout");
+  if (!user) return redirect("/login");
   return (
     <div className="flex min-h-screen ">
       <Sidebar />

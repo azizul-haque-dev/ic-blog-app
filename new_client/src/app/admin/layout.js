@@ -1,7 +1,14 @@
-
+import { getUser } from "@/actions/user.action";
 import Sidebar from "@/app/Components/adminComponets/AdminSideber";
+import { redirect } from "next/navigation";
 
-export default function Layout({ children }) {
+export default async function Layout({ children }) {
+  const { user } = await getUser();
+  if (!user) return redirect("/login");
+  if (user.role === "user") {
+    redirect("/user");
+  }
+  console.log(user, "from admin layout");
   return (
     <div className="flex min-h-screen ">
       <Sidebar />

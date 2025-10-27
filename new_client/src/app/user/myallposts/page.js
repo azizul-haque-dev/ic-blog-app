@@ -1,6 +1,6 @@
-
 import DeleteButton from "@/app/Components/userComponents/userPost/DeleteButton";
 import EditButton from "@/app/Components/userComponents/userPost/EditButton";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
 const initialPosts = [
   {
@@ -8,29 +8,28 @@ const initialPosts = [
     title: "Getting Started with Next.js",
     content:
       "Next.js is a powerful React framework for building fast, SEO-friendly web applications.",
-    image: "/404.png",
+    image: "/404.png"
   },
   {
     id: 2,
     title: "Understanding React Hooks",
     content:
       "Hooks like useState and useEffect make React functional components much more powerful.",
-    image: "/404.png",
+    image: "/404.png"
   },
   {
     id: 3,
     title: "Top 5 VS Code Extensions for Developers",
     content:
       "From Prettier to ESLint, here are some must-have extensions to boost your coding workflow.",
-    image: "/404.png",
-  },
+    image: "/404.png"
+  }
 ];
 
-const Dashboard = () => {
-  
-
+const Dashboard = async () => {
   const handleDelete = (post) => {
     // delete api call
+    revalidatePath("/blog");
   };
 
   const handleEdit = (updatedPost) => {
@@ -70,7 +69,7 @@ const Dashboard = () => {
                   {post.title}
                 </td>
                 <td className="py-3 px-4 flex gap-2">
-                  <EditButton post={post}/>
+                  <EditButton post={post} />
                   <DeleteButton post={post} />
                 </td>
               </tr>
