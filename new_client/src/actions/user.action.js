@@ -1,6 +1,6 @@
 "use server";
 
-import { customFetch } from "@/serveice/customFetch";
+import { customFetch } from "@/services/customFetch";
 import { redirect } from "next/navigation";
 
 // getData handles redirect itself
