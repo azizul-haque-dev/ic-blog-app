@@ -1,10 +1,30 @@
 "use client";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { deletePost } from "@/services/user.services";
+import toast from "react-hot-toast";
 
 const DeleteButton = ({ post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  function onDelete(){}
+  const [isPending, startTransition] = useTransition();
+
+  function onDelete() {
+    startTransition(async () => {
+      try {
+        const result = await deletePost(post._id);
+
+        if (result?.success) {
+          toast.success("Post deleted successfully!");
+          setIsModalOpen(false);
+        } else {
+          toast.error(result?.message || "Failed to delete post");
+        }
+      } catch (error) {
+        console.error("Delete error:", error);
+        toast.error(error.message || "An error occurred");
+      }
+    });
+  }
 
   return (
     <>
@@ -12,7 +32,8 @@ const DeleteButton = ({ post }) => {
         title="Delete post"
         aria-label={`Delete ${post.title}`}
         onClick={() => setIsModalOpen(true)}
-        className="inline-flex items-center gap-1 px-3 py-1.5 text-gray-700 text-sm font-medium rounded-md"
+        disabled={isPending}
+        className="inline-flex items-center gap-1 px-3 py-1.5 text-gray-700 text-sm font-medium rounded-md disabled:opacity-50"
       >
         <TrashIcon className="w-4 h-4 hover:text-[#7050ff]" />
       </button>
@@ -29,18 +50,17 @@ const DeleteButton = ({ post }) => {
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+                disabled={isPending}
+                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  onDelete(post);
-                  setIsModalOpen(false);
-                }}
-                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+                onClick={onDelete}
+                disabled={isPending}
+                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
               >
-                Delete
+                {isPending ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

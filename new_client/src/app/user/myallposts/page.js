@@ -1,5 +1,6 @@
 import DeleteButton from "@/app/Components/userComponents/userPost/DeleteButton";
 import EditButton from "@/app/Components/userComponents/userPost/EditButton";
+import { getUserPosts } from "@/services/user.services";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 const initialPosts = [
@@ -28,7 +29,8 @@ const initialPosts = [
 
 const Dashboard = async () => {
 
-// const getPosts = await 
+const getPosts = await getUserPosts()
+const initialPosts = await getPosts?.posts || [];
 
   const handleDelete = (post) => {
     // delete api call
@@ -61,7 +63,7 @@ const Dashboard = async () => {
               >
                 <td className="py-3 px-4">
                   <Image
-                    src={post.image}
+                    src={post.imageUrl}
                     alt={post.title}
                     width={80}
                     height={60}

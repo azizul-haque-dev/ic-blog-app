@@ -5,7 +5,6 @@ import EditModal from "./EditModal";
 
 const EditButton = ({ post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  function onEdit(){}
 
   return (
     <>
@@ -19,11 +18,7 @@ const EditButton = ({ post }) => {
       </button>
 
       {isModalOpen && (
-        <EditModal
-          post={post}
-          onClose={() => setIsModalOpen(false)}
-          onSave={onEdit}
-        />
+        <EditModal post={post} onClose={() => setIsModalOpen(false)} />
       )}
     </>
   );
