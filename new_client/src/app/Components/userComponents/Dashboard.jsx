@@ -2,13 +2,17 @@ import Card from "@/app/Components/userComponents/card";
 import EditProfileModal from "@/app/Components/userComponents/EditProfileModal";
 import { FileText, ThumbsDown, ThumbsUp, SquarePen } from "lucide-react";
 import Image from "next/image";
+import { getUserProfile } from "@/services/user.services";
 
-const UserDashBoard = () => {
+const UserDashBoard = async() => {
   // Dummy data
-  const user = { name: "Azizul Haque", email: "example@email.com" };
+  // const user = { name: "Azizul Haque", email: "example@email.com" };
   const totalLike = 125;
   const totalDislike = 34;
   const totalPost = 56;
+const userData = await getUserProfile()
+const user = userData?.user 
+
 
   return (
     <div className="flex flex-col min-h-screen text-gray-800">

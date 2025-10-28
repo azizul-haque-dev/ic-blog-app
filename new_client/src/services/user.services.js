@@ -1,0 +1,128 @@
+"use server";
+
+import { customFetch } from "@/services/customFetch";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+const BASE_URL = process.env.NEXT_APP_SERVER;
+
+// Helper function for error handling
+async function handleFetch(url, options = {}) {
+  const data = await customFetch(url, options);
+
+  // Handle authentication errors
+  if (!data?.success && data?.message === "expired access token") {
+    redirect("/logout");
+  }
+  if (!data?.success && data?.message === "Invalid access token") {
+    redirect("/login");
+  }
+
+  return data;
+}
+
+//  Get user profile
+export async function getUserProfile() {
+  const url = `${BASE_URL}/user/profile`;
+  const options = {
+    method: "GET",
+    cache: "no-store" // Always fresh data
+  };
+  return handleFetch(url, options);
+}
+
+//  Upload avatar - Handle FormData separately for Cloudinary
+export async function uploadAvatar(formData) {
+  const url = `${BASE_URL}/user/upload/avater`;
+
+  try {
+    // Get access token from cookies
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("accessToken")?.value;
+
+    if (!accessToken) {
+      redirect("/login");
+    }
+
+    //  Manual fetch for FormData/multipart upload
+    // Don't set Content-Type - browser will set it with boundary
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+        // ❌ Don't add Content-Type for FormData
+      },
+      body: formData // FormData object
+    });
+
+    const data = await response.json();
+
+    // Handle authentication errors
+    if (!data?.success && data?.message === "expired access token") {
+      redirect("/logout");
+    }
+    if (!data?.success && data?.message === "Invalid access token") {
+      redirect("/login");
+    }
+
+    //  Revalidate to refresh server component data
+    if (data?.success) {
+      revalidatePath("/user/dashboard");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Upload avatar error:", error);
+    return {
+      success: false,
+      message: error.message || "Upload failed"
+    };
+  }
+}
+
+//  Forget password (no auth required)
+export async function forgetPassword(email) {
+  const url = `${BASE_URL}/user/forget/password`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email })
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error("Forget password error:", error);
+    return {
+      success: false,
+      message: error.message || "Request failed"
+    };
+  }
+}
+
+//  Reset password (no auth required)
+export async function resetPassword(token, newPassword) {
+  const url = `${BASE_URL}/user/reset/password`;
+
+  try {
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ token, newPassword })
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return {
+      success: false,
+      message: error.message || "Reset failed"
+    };
+  }
+}

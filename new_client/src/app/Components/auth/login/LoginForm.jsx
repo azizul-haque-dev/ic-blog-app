@@ -20,7 +20,7 @@ function LoginForm() {
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`,
+        `http://localhost:8000/api/auth/login`,
         {
           method: "POST",
           credentials: "include",
@@ -30,17 +30,26 @@ function LoginForm() {
       );
 
       const data = await res.json();
-      if (!res.ok || !data.success) toast.error("Login response flied");
+    //  Early return on error
+    if (!res.ok || !data?.success) {
+      const errorMessage = data?.message || "Login failed";
+      toast.error(errorMessage);
+      setError(errorMessage);
+      return { success: false, message: errorMessage }; // Stop here
+    }
 
-      //  Redirect based on role
-      if (data.user.role === "admin") router.push("/admin");
-      else router.push("/user");
-      toast.success("Login successful");
-
-      return { success: true };
+    //  Only reached when login succeeds
+    // Redirect based on role
+    if (data?.user.role === "admin") router.push("/admin");
+    else router.push("/user");
+    
+    toast.success("Login successful");
+    return { success: true };
     } catch (err) {
-      toast.error(err.message);
-      return { success: false, message: err.message };
+      const errorMessage = err.message || "An error occurred";
+    toast.error(errorMessage);
+    setError(errorMessage);
+    return { success: false, message: errorMessage };
     } finally {
       setIsLoading(false);
     }
