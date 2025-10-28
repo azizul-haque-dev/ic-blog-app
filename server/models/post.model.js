@@ -16,7 +16,7 @@ const postSchema = new mongoose.Schema(
     content: { type: String, required: true },
     imageUrl: { type: String, required: true },
     imageId: { type: String, required: true },
-    categories: { type: [String], required: true },
+    categories: { type: String, required: true },
     status: {
       type: String,
       default: "pending",

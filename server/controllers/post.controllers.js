@@ -10,7 +10,7 @@ import { getPostsByUserId } from "../services/post.services.js";
 const postSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
   content: z.string().min(10, "Content must be at least 10 characters."),
-  categories: z.array(z.string()).min(1, "At least one category is required.")
+  categories: z.string().min(1, "At least one category is required.")
 })
 
 
@@ -20,7 +20,7 @@ const postSchema = z.object({
 const postUpdateSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters.").optional(),
   content: z.string().min(10, "Content must be at least 10 characters.").optional(),
-  categories: z.array(z.string()).min(1, "At least one category is required.").optional(),
+  categories: z.string().min(1, "At least one category is required.").optional(),
 }).partial(); // .partial() makes all fields in the schema optional.
 
 
@@ -94,26 +94,9 @@ export const createPost = async (req, res) => {
 //  Update Post text fields only
 export const updatePost = async (req, res) => {
   try {
-    const { title, content, categories } = postSchema.parse(req.body);
+    const { title, content, categories } =postUpdateSchema.parse(req.body);
     const { id } = req.params;
-    // let { categories } = req.body;
 
-    // যদি categories string হয়, তাহলে parse করো
-    // if (typeof categories === "string") {
-    //   try {
-    //     categories = JSON.parse(categories);
-    //   } catch {
-    //     categories = [];
-    //   }
-    // }
-
-    // set categories to an empty array if it's not provided or not an array
-    if (!categories || !Array.isArray(categories)) {
-      return res.status(400).json({
-        success: false,
-        message: "Categories must be an array"
-      });
-    }
 
     
     const updatePost = await PostModel.findByIdAndUpdate(
@@ -366,13 +349,14 @@ export const updateUserPost = async (req, res) => {
   }
 
   try {
-    const updatedPost = await updateUserPostById(postId, req.user.id, parseBody.data);
-
+    const updatedPost = await updateUsrPostById(postId, req.user.id, parseBody.data);
+    console.log(parseBody.data)
     if (!updatedPost) {
       return res.status(404).json({ success: false, message: "Post not found or you don't have permission to edit it." });
     }
     res.status(200).json({ success: true, message: "Post updated successfully.", post: updatedPost });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: "Internal server error." });
   }
 };

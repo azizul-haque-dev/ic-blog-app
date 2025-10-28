@@ -27,6 +27,9 @@ const initialPosts = [
 ];
 
 const Dashboard = async () => {
+
+// const getPosts = await 
+
   const handleDelete = (post) => {
     // delete api call
     revalidatePath("/blog");

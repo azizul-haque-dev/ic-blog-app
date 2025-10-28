@@ -126,3 +126,142 @@ export async function resetPassword(token, newPassword) {
     };
   }
 }
+
+
+
+// ========== USER POSTS ==========
+
+//  Get all posts by logged-in user
+export async function getUserPosts() {
+  const url = `${BASE_URL}/post/my-post`;
+  const options = {
+    method: "GET",
+    cache: "no-store"
+  };
+  return handleFetch(url, options);
+}
+
+//  Create new post (with image upload - FormData)
+export async function createPost(formData) {
+  const url = `${BASE_URL}/post/create`;
+
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("accessToken")?.value;
+
+    if (!accessToken) {
+      redirect("/login");
+    }
+
+    // Don't set Content-Type - browser will set multipart/form-data with boundary
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: formData // FormData with image, title, content, categories
+    });
+
+    const data = await response.json();
+
+    if (!data?.success && data?.message === "expired access token") {
+      redirect("/logout");
+    }
+    if (!data?.success && data?.message === "Invalid access token") {
+      redirect("/login");
+    }
+
+    // Revalidate posts page
+    if (data?.message === "Post created successfully!") {
+      revalidatePath("/user/posts");
+      revalidatePath("/posts");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Create post error:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to create post"
+    };
+  }
+}
+
+//  Update post (text fields only - title, content, categories)
+export async function updatePost(postId, postData) {
+  const url = `${BASE_URL}/post/update/${postId}`;
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(postData) // { title, content, categories }
+  };
+
+  const result = await handleFetch(url, options);
+
+  if (result?.message === "Post updated successfully!") {
+    revalidatePath("/user/posts");
+    revalidatePath(`/posts/${postId}`);
+  }
+
+  return result;
+}
+
+//  Update post image (FormData)
+export async function updatePostImage(postId, formData) {
+  const url = `${BASE_URL}/post/update-post-image/${postId}`;
+
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("accessToken")?.value;
+
+    if (!accessToken) {
+      redirect("/login");
+    }
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: formData // FormData with image
+    });
+
+    const data = await response.json();
+
+    if (!data?.success && data?.message === "expired access token") {
+      redirect("/logout");
+    }
+    if (!data?.success && data?.message === "Invalid access token") {
+      redirect("/login");
+    }
+
+    if (data?.success) {
+      revalidatePath("/user/posts");
+      revalidatePath(`/posts/${postId}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Update post image error:", error);
+    return {
+      success: false,
+      message: error.message || "Failed to update image"
+    };
+  }
+}
+
+//  Delete post by user
+export async function deletePost(postId) {
+  const url = `${BASE_URL}/post/delete/${postId}`;
+  const options = {
+    method: "DELETE"
+  };
+
+  const result = await handleFetch(url, options);
+
+  if (result?.success) {
+    revalidatePath("/user/posts");
+    revalidatePath("/posts");
+  }
+
+  return result;
+}
