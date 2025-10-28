@@ -1,18 +1,18 @@
 import Card from "@/app/Components/userComponents/card";
 import EditProfileModal from "@/app/Components/userComponents/EditProfileModal";
-import { FileText, ThumbsDown, ThumbsUp, SquarePen } from "lucide-react";
+import { FileText, ThumbsDown, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import { getUserProfile } from "@/services/user.services";
 
-const UserDashBoard = async() => {
-  // Dummy data
-  // const user = { name: "Azizul Haque", email: "example@email.com" };
+export default async function UserDashBoard() {
+  // Dummy stats data (replace with real API call when backend ready)
   const totalLike = 125;
   const totalDislike = 34;
   const totalPost = 56;
-const userData = await getUserProfile()
-const user = userData?.user 
 
+  // Fetch user profile
+  const userData = await getUserProfile();
+  const user = userData?.user || {};
 
   return (
     <div className="flex flex-col min-h-screen text-gray-800">
@@ -27,7 +27,7 @@ const user = userData?.user
               alt="Profile Picture"
               width={80}
               height={80}
-              className="rounded-full border border-gray-200"
+              className="rounded-full border border-gray-200 object-cover"
             />
             <div>
               <h3 className="text-2xl font-semibold text-[#7050ff]">
@@ -37,7 +37,7 @@ const user = userData?.user
             </div>
           </div>
 
-          {/* More Button + Modal */}
+          {/* Edit Button + Modal */}
           <EditProfileModal user={user} />
         </div>
 
@@ -65,6 +65,4 @@ const user = userData?.user
       </main>
     </div>
   );
-};
-
-export default UserDashBoard;
+}

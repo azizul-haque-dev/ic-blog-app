@@ -81,6 +81,26 @@ export async function uploadAvatar(formData) {
   }
 }
 
+
+//  Update user profile (name, email)
+export async function updateUserProfile(profileData) {
+  const url = `${BASE_URL}/user/profile`;
+  const options = {
+    method: "PATCH",
+    body: JSON.stringify(profileData) // { name, email }
+  };
+
+  const result = await handleFetch(url, options);
+
+  if (result?.success) {
+    revalidatePath("/user/dashboard");
+  }
+
+  return result;
+}
+
+
+
 //  Forget password (no auth required)
 export async function forgetPassword(email) {
   const url = `${BASE_URL}/user/forget/password`;
