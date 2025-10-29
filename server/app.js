@@ -9,7 +9,10 @@ import likeRoutes from "./routes/like.routes.js";
 import postRoutes from "./routes/post.route.js";
 import userRoutes from "./routes/user.route.js";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+  console.log("loaded .env file for development");
+}
 
 const app = express();
 
