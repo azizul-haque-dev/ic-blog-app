@@ -3,8 +3,10 @@ import { z } from "zod";
 import { UserModel } from "../models/user.models.js";
 import { sendEmail } from "../services/sendEmail.js";
 import {
+  generateAccessToken,
   generateVerifyEmailToken,
-  verifyEmailToken, generateAccessToken, generateRefreshToken
+  verifyEmailToken,
+  verifyRefreshToken
 } from "../services/token.services.js";
 
 import { validatePassword } from "../services/auth.services.js";
@@ -84,7 +86,7 @@ const registerUser = async (req, res) => {
     await user.save();
     res.cookie("emailToken", emailToken, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 5 * 60 * 1000
     });
@@ -136,7 +138,7 @@ const verifyEmail = async (req, res) => {
 
     res.clearCookie("emailToken", {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "none"
     });
 
@@ -149,12 +151,9 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-
-
-
 const loginUser = async (req, res) => {
   try {
-    //  Validate request body 
+    //  Validate request body
     const parseBody = loginSchema.safeParse(req.body);
     if (!parseBody.success) {
       return res
@@ -175,7 +174,7 @@ const loginUser = async (req, res) => {
     if (!user.isVerified) {
       return res.status(403).json({
         success: false,
-        message: "Please verify your email before logging in.",
+        message: "Please verify your email before logging in."
       });
     }
 
@@ -183,7 +182,7 @@ const loginUser = async (req, res) => {
     if (user.status !== "approved") {
       return res.status(403).json({
         success: false,
-        message: `Your account status is: ${user.status}. Please contact support.`,
+        message: `Your account status is: ${user.status}. Please contact support.`
       });
     }
 
@@ -194,41 +193,39 @@ const loginUser = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Invalid credentials" });
     }
-
-    //  Generate Access and Refresh Tokens
-    const accessToken = generateAccessToken({ id: user._id, role: user.role });
-    const refreshToken = generateRefreshToken({ id: user._id });
-
-    // Set tokens in secure, httpOnly cookies
-    const cookieOptions = {
-            httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    };
-
-    res.cookie("accessToken", accessToken, {
-      ...cookieOptions,
-      maxAge: 15 * 60 * 1000, // 15 minutes
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-
-  
     const userData = {
       id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
+      avatarUrl: user.avatarUrl
     };
 
+    //  Generate Access and Refresh Tokens
+    const accessToken = generateAccessToken(userData);
+    // const refreshToken = generateRefreshToken(user._id);
+
+    // Set tokens in secure, httpOnly cookies
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax"
+    };
+
+    res.cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 24 * 60 * 60 * 1000 // 15 minutes
+    });
+
+    // res.cookie("refreshToken", refreshToken, {
+    //   ...cookieOptions,
+    //   maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    // });
 
     return res.status(200).json({
       success: true,
       message: "Logged in successfully",
-      user: userData,
+      user: userData
     });
   } catch (error) {
     console.error("Error logging in user:", error);
@@ -238,15 +235,16 @@ const loginUser = async (req, res) => {
   }
 };
 
-const logoutUser = (req, res) => {
+const logoutUser = async (req, res) => {
   try {
     const cookieOptions = {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     };
 
-    // Clear both cookies 
-    res.clearCookie("accessToken")
-    res.clearCookie("refreshToken")
+    // Clear the accessToken cookie
+    res.clearCookie("accessToken", cookieOptions);
 
     return res
       .status(200)
@@ -259,4 +257,48 @@ const logoutUser = (req, res) => {
   }
 };
 
-export { registerUser, verifyEmail, loginUser, logoutUser };
+const refreshToken = async (req, res) => {
+  try {
+    const body = req.body || {};
+    const token =
+      req.cookies?.refreshToken ||
+      req.headers["authorization"]?.split(" ")[1] ||
+      null;
+    console.log("refresh token token", token);
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Refresh token missing" });
+    }
+
+    const decoded = await verifyRefreshToken(token);
+    const user = await UserModel.findById(decoded.userId);
+    if (!user || user.refreshToken !== token) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Invalid or expired refresh token" });
+    }
+
+    // ✅ শুধু access token রিনিউ করো
+    const newAccessToken = generateAccessToken(user._id);
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 15 * 60 * 1000 // 15 min
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Access token refreshed successfully",
+      accessToken: newAccessToken
+    });
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export { loginUser, logoutUser, refreshToken, registerUser, verifyEmail };

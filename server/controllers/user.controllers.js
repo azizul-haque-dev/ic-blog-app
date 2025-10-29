@@ -5,6 +5,12 @@ import { generateResetToken } from "../services/token.services.js";
 import cloudinary from "../utils/coudinary.config.js";
 import { PASSWORD_RESET_REQUEST_TEMPLATE } from "../utils/emailTemplete.js";
 
+import {
+  checkEmailExists,
+  getUserStats,
+  updateUserById
+} from "../services/user.services.js";
+
 const forgetPassword = async (req, res) => {
   const { email } = req.body;
 
@@ -18,6 +24,7 @@ const forgetPassword = async (req, res) => {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(200).json({
+        success: false,
         message: "No user found with this email, Please provide a valid email"
       });
     }
@@ -40,13 +47,15 @@ const forgetPassword = async (req, res) => {
 
     // Send success response
     res.status(200).json({
+      success: true,
       message: " You will receive a reset link. Please check your email"
     });
   } catch (error) {
     console.error("Forgot Password Error:", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred. Please try again later." });
+    res.status(500).json({
+      success: false,
+      message: "An error occurred. Please try again later."
+    });
   }
 };
 
@@ -85,7 +94,12 @@ const resetPassword = async (req, res) => {
     user.password = newPassword;
     await user.save();
 
-    res.status(200).json({ message: "Password has been reset successfully." });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Password has been reset successfully."
+      });
   } catch (err) {
     console.error("Reset Password Error:", err);
     res.status(500).json({ message: "Server error. Please try again later." });
@@ -133,14 +147,9 @@ const uploadAvatar = async (req, res) => {
   }
 };
 
-
-
-export const getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res) => {
   try {
-
     const userId = req.user.id;
-
-
     const user = await UserModel.findById(userId).select(
       "-password -emailVerificationToken -verificationTokenExpireAt -resetPasswordToken -resetPasswordExpires"
     );
@@ -148,23 +157,117 @@ export const getUserProfile = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User not found." });
+        .json({ success: false, message: "User not found for profile." });
     }
-
 
     res.status(200).json({
       success: true,
-      user,
+      user
     });
   } catch (error) {
     console.error("Get User Profile Error:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error. Please try again later." });
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later."
+    });
   }
 };
 
+//  Update user profile (name, email)
+const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name, email } = req.body;
 
+    // Validate input
+    if (!name && !email) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one field (name or email) is required to update"
+      });
+    }
 
+    // Validate name length
+    if (name && (name.trim().length < 2 || name.trim().length > 50)) {
+      return res.status(400).json({
+        success: false,
+        message: "Name must be between 2 and 50 characters"
+      });
+    }
 
-export { forgetPassword, resetPassword, uploadAvatar };
+    // Validate email format
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid email format"
+        });
+      }
+
+      // Check if email already exists
+      const emailExists = await checkEmailExists(email, userId);
+      if (emailExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is already in use by another account"
+        });
+      }
+    }
+
+    // Prepare update data
+    const updateData = {};
+    if (name) updateData.name = name.trim();
+    if (email) updateData.email = email.toLowerCase().trim();
+
+    // Update user using service
+    const updatedUser = await updateUserById(userId, updateData);
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+const getUserStatistics = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const stats = await getUserStats(userId);
+
+    return res.status(200).json({
+      success: true,
+      stats
+    });
+  } catch (error) {
+    console.error("Get user statistics error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+export {
+  forgetPassword,
+  getUserProfile,
+  getUserStatistics,
+  resetPassword,
+  updateUserProfile,
+  uploadAvatar
+};

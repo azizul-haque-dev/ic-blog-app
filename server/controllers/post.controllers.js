@@ -1,36 +1,38 @@
 import mongoose from "mongoose";
 import { z } from "zod";
 import { PostModel } from "../models/post.model.js";
-import cloudinary from "../utils/coudinary.config.js";
 import { getPostsByUserId } from "../services/post.services.js";
-
-
+import cloudinary from "../utils/coudinary.config.js";
 
 // Zod schema for validating post updates. All fields are optional.
 const postSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
   content: z.string().min(10, "Content must be at least 10 characters."),
-  categories: z.array(z.string()).min(1, "At least one category is required.")
-})
-
-
-
+  categories: z.string().min(1, "At least one category is required.")
+});
 
 // Zod schema for validating post updates. All fields are optional.
-const postUpdateSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters.").optional(),
-  content: z.string().min(10, "Content must be at least 10 characters.").optional(),
-  categories: z.array(z.string()).min(1, "At least one category is required.").optional(),
-}).partial(); // .partial() makes all fields in the schema optional.
-
+const postUpdateSchema = z
+  .object({
+    title: z.string().min(3, "Title must be at least 3 characters.").optional(),
+    content: z
+      .string()
+      .min(10, "Content must be at least 10 characters.")
+      .optional(),
+    categories: z
+      .string()
+      .min(1, "At least one category is required.")
+      .optional()
+  })
+  .partial(); // .partial() makes all fields in the schema optional.
 
 // Controller function to create a new post
 export const createPost = async (req, res) => {
   try {
     // Validate request body using Zod
-    const { title, content , categories } = postSchema.parse(req.body);
+    const { title, content, categories } = postSchema.parse(req.body);
 
-    const userId = req.user.id
+    const userId = req.user.id;
 
     // Check if a file is uploaded
     if (!req.file) {
@@ -44,10 +46,9 @@ export const createPost = async (req, res) => {
     const imageId = req.file.filename;
 
     // Extract user ID from authenticated user
-   
 
     // Handle optional categories field
-  
+
     // if (!categories && !Array.isArray(categories)) {
     //   categories = [];
     // }
@@ -93,31 +94,15 @@ export const createPost = async (req, res) => {
 
 //  Update Post text fields only
 export const updatePost = async (req, res) => {
+  console.log(req.body, "body");
   try {
-    const { title, content, categories } = postSchema.parse(req.body);
+    const { title, content, categories } = postUpdateSchema.parse(req.body);
+    console.log(title, content, categories, "form server");
     const { id } = req.params;
-    // let { categories } = req.body;
+    const postId = new mongoose.Types.ObjectId(id);
 
-    // যদি categories string হয়, তাহলে parse করো
-    // if (typeof categories === "string") {
-    //   try {
-    //     categories = JSON.parse(categories);
-    //   } catch {
-    //     categories = [];
-    //   }
-    // }
-
-    // set categories to an empty array if it's not provided or not an array
-    if (!categories || !Array.isArray(categories)) {
-      return res.status(400).json({
-        success: false,
-        message: "Categories must be an array"
-      });
-    }
-
-    
     const updatePost = await PostModel.findByIdAndUpdate(
-      id,
+      postId,
       { title, content, categories },
       { new: true }
     );
@@ -203,9 +188,10 @@ export const updatePostImage = async (req, res) => {
 export const postDeleteById = async (req, res) => {
   try {
     const { id } = req.params;
+    const postId = new mongoose.Types.ObjectId(id);
 
     // delete post by id
-    const post = await PostModel.findByIdAndDelete(id);
+    const post = await PostModel.findByIdAndDelete(postId);
     // if post is not found then send error message
     if (!post) {
       return res.status(404).json({
@@ -232,18 +218,19 @@ export const getPosts = async (req, res) => {
   try {
     // Extract pagination values
     const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.max(1, parseInt(req.query.limit) || 12);
+    const limit = Math.max(1, parseInt(req.query.limit) || 4);
     const skip = (page - 1) * limit;
 
     // Extract filters
     const { category, search } = req.query;
+    console.log({ category, search, page });
 
     //  Build dynamic filter object
-    const filter = {};
+    const filter = { status: "approved" };
 
     // Filter by category (case-insensitive match)
     if (category) {
-      filter.categories = { $in: [category.toLowerCase()] };
+      filter.categories = { $in: [category] };
     }
 
     // Search by title or content (Mongo text search)
@@ -296,7 +283,8 @@ export const getPosts = async (req, res) => {
 export const singlePost = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await PostModel.findById(id)
+    const postId = new mongoose.Types.ObjectId(id);
+    const post = await PostModel.findById(postId)
       .populate("userId", "name email avatarUrl") // post user
       .populate("likes", "name email avatarUrl") // who likeed
       .populate("dislikes", "name email avatarUrl") // who disliked
@@ -326,7 +314,6 @@ export const singlePost = async (req, res) => {
   }
 };
 
-
 // Get User All Post
 
 export const getUserAllPost = async (req, res) => {
@@ -338,8 +325,6 @@ export const getUserAllPost = async (req, res) => {
   }
 };
 
-
-
 // export const getUserAllPost = async (req, res) => {
 //   try {
 //     const posts = await getPostsByUserId(req.user.id);
@@ -349,34 +334,45 @@ export const getUserAllPost = async (req, res) => {
 //   }
 // };
 
-
-
-
 export const updateUserPost = async (req, res) => {
   const { postId } = req.params;
   const parseBody = postUpdateSchema.safeParse(req.body);
 
   if (!parseBody.success) {
-    return res.status(400).json({ success: false, errors: parseBody.error.issues });
+    return res
+      .status(400)
+      .json({ success: false, errors: parseBody.error.issues });
   }
 
   // Ensure there's something to update
   if (Object.keys(parseBody.data).length === 0) {
-      return res.status(400).json({ success: false, message: "No update data provided." });
+    return res
+      .status(400)
+      .json({ success: false, message: "No update data provided." });
   }
 
   try {
-    const updatedPost = await updateUserPostById(postId, req.user.id, parseBody.data);
+    const updatedPost = await updateUserPostById(
+      postId,
+      req.user.id,
+      parseBody.data
+    );
 
     if (!updatedPost) {
-      return res.status(404).json({ success: false, message: "Post not found or you don't have permission to edit it." });
+      return res.status(404).json({
+        success: false,
+        message: "Post not found or you don't have permission to edit it."
+      });
     }
-    res.status(200).json({ success: true, message: "Post updated successfully.", post: updatedPost });
+    res.status(200).json({
+      success: true,
+      message: "Post updated successfully.",
+      post: updatedPost
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error." });
   }
 };
-
 
 export const deleteUserPost = async (req, res) => {
   const { postId } = req.params;
@@ -385,11 +381,15 @@ export const deleteUserPost = async (req, res) => {
     const deletedPost = await deleteUserPostById(postId, req.user.id);
 
     if (!deletedPost) {
-      return res.status(404).json({ success: false, message: "Post not found or you don't have permission to delete it." });
+      return res.status(404).json({
+        success: false,
+        message: "Post not found or you don't have permission to delete it."
+      });
     }
-    res.status(200).json({ success: true, message: "Post deleted successfully." });
+    res
+      .status(200)
+      .json({ success: true, message: "Post deleted successfully." });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error." });
   }
 };
-

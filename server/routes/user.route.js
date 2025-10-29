@@ -3,7 +3,9 @@ import { Router } from "express";
 import {
   forgetPassword,
   getUserProfile,
+  getUserStatistics,
   resetPassword,
+  updateUserProfile,
   uploadAvatar
 } from "../controllers/user.controllers.js";
 import upload from "../middlewares/uploadImage.js";
@@ -20,6 +22,10 @@ router.patch(
 router.post("/forget/password", forgetPassword);
 router.patch("/reset/password", resetPassword);
 
-router.get("/profile", verifyUser,  getUserProfile)
+router.get("/profile", verifyUser, getUserProfile);
+
+router.patch("/profile", verifyUser, updateUserProfile);
+
+router.get("/stats", verifyUser, getUserStatistics);
 
 export default router;

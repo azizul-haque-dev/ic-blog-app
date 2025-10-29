@@ -16,11 +16,11 @@ const postSchema = new mongoose.Schema(
     content: { type: String, required: true },
     imageUrl: { type: String, required: true },
     imageId: { type: String, required: true },
-    categories: { type: [String], required: true },
+    categories: { type: String, required: true },
     status: {
       type: String,
       default: "pending",
-      enum: ["approved", "rejected", "pending"]
+      enum: ["approved", "suspended", "pending"]
     },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "comment" }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
@@ -30,10 +30,31 @@ const postSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-// Text index for search
-postSchema.index({ title: "text", content: "text" });
-// filter by category index
+
+// Text index for full-text search on title and content (weighted)
+postSchema.index(
+  { title: "text", content: "text" },
+  {
+    weights: { title: 10, content: 5 },
+    name: "post_text_search"
+  }
+);
+
+// Filter by category index
 postSchema.index({ categories: 1 });
+
+// Filter by status index (fixed typo from 'sataus')
+postSchema.index({ status: 1 });
+
+// Compound index for filtering approved posts by category
+postSchema.index({ status: 1, categories: 1 });
+
+// Index for sorting by creation date (common use case)
+postSchema.index({ createdAt: -1 });
+
+// Index for user's posts
+postSchema.index({ userId: 1, createdAt: -1 });
+
 // Pre middleware for findOneAndDelete
 postSchema.pre("findOneAndDelete", async function (next) {
   try {
@@ -45,13 +66,13 @@ postSchema.pre("findOneAndDelete", async function (next) {
       await cloudinary.uploader.destroy(doc.imageId);
     }
 
-    //  Delete all comments related to this post
+    // 2. Delete all comments related to this post
     await CommentModel.deleteMany({ postId: doc._id });
 
-    //  Delete all likes related to this post
+    // 3. Delete all likes related to this post
     await LikeModel.deleteMany({ postId: doc._id });
 
-    //  Delete all dislikes related to this post
+    // 4. Delete all dislikes related to this post
     await DislikeModel.deleteMany({ postId: doc._id });
 
     next();
@@ -59,6 +80,7 @@ postSchema.pre("findOneAndDelete", async function (next) {
     next(err);
   }
 });
+
 postSchema.post("save", async function (doc, next) {
   try {
     if (doc.isNew) {

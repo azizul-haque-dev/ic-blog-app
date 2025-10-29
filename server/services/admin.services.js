@@ -7,18 +7,19 @@ export const getAllUsersWithStats = async () => {
 
   const totalUsers = await UserModel.countDocuments();
   const adminCount = await UserModel.countDocuments({ role: "admin" });
-  const suspendedCount = await UserModel.countDocuments({ status: "suspended" });
+  const pendingUsers = await UserModel.countDocuments({
+    status: "pending",
+  });
 
   return {
     users,
     stats: {
       totalUsers,
       adminCount,
-      suspendedCount,
+      pendingUsers,
     },
   };
 };
-
 
 export const createNewUser = async (userData) => {
   const { name, email, password, role, status } = userData;
@@ -26,7 +27,7 @@ export const createNewUser = async (userData) => {
   const newUser = new UserModel({
     name,
     email,
-    password, 
+    password,
     role: role || "user",
     status: status || "approved",
     isVerified: true, // Admin-created accounts are verified by default
@@ -41,7 +42,6 @@ export const createNewUser = async (userData) => {
   return userResponse;
 };
 
-
 export const updateUserStatusById = async (userId, status) => {
   return await UserModel.findByIdAndUpdate(
     userId,
@@ -50,24 +50,19 @@ export const updateUserStatusById = async (userId, status) => {
   ).select("-password");
 };
 
-
-
 export const getAllPostsFromAllUsers = async () => {
   const posts = await PostModel.find({})
     .populate("userId", "name email avatarUrl") // Correct path is "userId"
-    .sort({ createdAt: -1 }); // Sort by newest first
-  return posts;
+    .sort({ createdAt: -1 });
+  const pendingPost = await PostModel.countDocuments({ sataus: "pending" });
+
+  return { posts, pendingPost };
 };
 
-
 export const updatePostStatusById = async (id, status) => {
- 
   const post = await PostModel.findByIdAndUpdate(id, { status }, { new: true });
   return post;
 };
-
-
-
 
 export const updateCommentStatusById = async (commentId, status) => {
   try {
@@ -87,7 +82,6 @@ export const updateCommentStatusById = async (commentId, status) => {
   }
 };
 
-
 export const deleteCommentById = async (commentId) => {
   try {
     const result = await CommentModel.findByIdAndDelete(commentId);
@@ -97,7 +91,7 @@ export const deleteCommentById = async (commentId) => {
     }
 
     return { message: "Comment permanently deleted successfully." };
-  } catch (error) { 
-    console.log(error)
+  } catch (error) {
+    console.log(error);
   }
-  }
+};

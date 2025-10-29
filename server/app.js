@@ -5,6 +5,7 @@ import express from "express";
 import adminRoutes from "./routes/admin.route.js";
 import authRoutes from "./routes/auth.route.js";
 import commentRoutes from "./routes/comment.route.js";
+import likeRoutes from "./routes/like.routes.js";
 import postRoutes from "./routes/post.route.js";
 import userRoutes from "./routes/user.route.js";
 
@@ -38,6 +39,7 @@ app.use("/api/post", postRoutes);
 
 // comment route
 app.use("/api/posts/:postId/comments", commentRoutes);
+app.use("/api/like", likeRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack, "error via middleware");
