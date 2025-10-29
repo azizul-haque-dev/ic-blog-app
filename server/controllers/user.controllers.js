@@ -5,6 +5,8 @@ import { generateResetToken } from "../services/token.services.js";
 import cloudinary from "../utils/coudinary.config.js";
 import { PASSWORD_RESET_REQUEST_TEMPLATE } from "../utils/emailTemplete.js";
 
+import { updateUserById, checkEmailExists } from "../services/user.services.js";
+
 const forgetPassword = async (req, res) => {
   const { email } = req.body;
 
@@ -161,4 +163,77 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-export { forgetPassword, getUserProfile, resetPassword, uploadAvatar };
+
+
+// ✅ Update user profile (name, email)
+const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name, email } = req.body;
+
+    // Validate input
+    if (!name && !email) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one field (name or email) is required to update"
+      });
+    }
+
+    // Validate name length
+    if (name && (name.trim().length < 2 || name.trim().length > 50)) {
+      return res.status(400).json({
+        success: false,
+        message: "Name must be between 2 and 50 characters"
+      });
+    }
+
+    // Validate email format
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid email format"
+        });
+      }
+
+      // Check if email already exists
+      const emailExists = await checkEmailExists(email, userId);
+      if (emailExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Email is already in use by another account"
+        });
+      }
+    }
+
+    // Prepare update data
+    const updateData = {};
+    if (name) updateData.name = name.trim();
+    if (email) updateData.email = email.toLowerCase().trim();
+
+    // Update user using service
+    const updatedUser = await updateUserById(userId, updateData);
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
+
+export { forgetPassword, getUserProfile, resetPassword, uploadAvatar, updateUserProfile };
