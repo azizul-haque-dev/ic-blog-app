@@ -1,15 +1,11 @@
-import { comments } from "@/damyData/post-damyData";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import { isUser } from "@/services/verify.accessToken";
 import Link from "next/link";
 import CommentCard from "./CommentCard";
+import AddComment from "./blog/AddComment";
+import AddLikeOrDislike from "./blog/AddLikeOrDislike";
 
-export default function PostContent({ post, isAdmin = false }) {
-  const likeCount = post.likes?.length || 0;
-  const dislikeCount = post.dislikes?.length || 0;
-  const postComments = comments.filter(
-    (comment) => comment.post_id == post._id
-  );
-
+export default async function PostContent({ post, isAdmin = false }) {
+  const userData = await isUser();
   return (
     <div className="max-w-4xl mx-auto mt-10 px-4 py-10 bg-white text-gray-700 rounded-2xl shadow-lg">
       {/* Hero Image */}
@@ -60,43 +56,15 @@ export default function PostContent({ post, isAdmin = false }) {
 
       {/* Like / Dislike */}
 
-      <div className="mt-2 flex gap-2 items-center">
-        <button className="flex items-center gap-2  px-4 py-2 rounded-full transition">
-          <ThumbsUp /> {likeCount}
-        </button>
-        <button className="flex items-center gap-2  px-4 py-2 rounded-full transition">
-          <ThumbsDown /> {dislikeCount}
-        </button>
-      </div>
+      <AddLikeOrDislike post={post} user={userData?.user} />
 
       {/* Add Comment UI */}
 
-      {!isAdmin && (
-        <div className="mt-12">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-            Add a Comment
-          </h2>
-
-          <div className="flex flex-col md:flex-col items-start gap-4">
-            <textarea
-              placeholder="Write your comment..."
-              className="w-full md:flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#7050ff] transition duration-200 placeholder-gray-500"
-              rows={4}
-            />
-
-            <button
-              type="submit"
-              className="w-full md:w-auto px-6 py-3 bg-[#7050ff] text-white font-semibold rounded-lg hover:bg-[#623ffb] transition duration-200 shadow-sm"
-            >
-              Post Comment
-            </button>
-          </div>
-        </div>
-      )}
+      {!isAdmin && <AddComment post={post} />}
 
       {/* Comments */}
       <div className="mt-8">
-        <CommentCard comments={postComments} isAdmin={isAdmin} />
+        <CommentCard comments={post?.comments} isAdmin={isAdmin} />
       </div>
 
       {/* Back Button */}

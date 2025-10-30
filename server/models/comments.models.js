@@ -1,26 +1,27 @@
 import mongoose from "mongoose";
+import { PostModel } from "./post.model.js";
 
 const commentSchema = new mongoose.Schema(
   {
     postId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
-      required: true,
+      required: true
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: true
     },
     status: {
       type: String,
       default: "approved",
-      enum: ["approved", "suspended"],
+      enum: ["approved", "suspended"]
     },
     content: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   { timestamps: true }
 );
@@ -29,7 +30,7 @@ const commentSchema = new mongoose.Schema(
 commentSchema.post("save", async function (doc, next) {
   try {
     await PostModel.findByIdAndUpdate(doc.postId, {
-      $push: { comments: doc._id },
+      $push: { comments: doc._id }
     });
     next();
   } catch (err) {

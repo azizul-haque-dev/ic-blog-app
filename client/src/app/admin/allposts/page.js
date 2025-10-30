@@ -1,9 +1,9 @@
-import { getWithoutPendingPost } from "@/actions/admin.action";
 import { getAllBlogPost } from "@/actions/post.action";
 import AdminBlogPagination from "@/app/Components/adminComponets/AdminBlogPagination";
 import PostEditAndDeleteButton from "@/app/Components/adminComponets/PostEditAndDeleteButton";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 async function page({ searchParams }) {
   const { page } = await searchParams;
@@ -66,7 +66,12 @@ async function page({ searchParams }) {
           ))}
         </tbody>
       </table>
-      <AdminBlogPagination totalPages={totalPages} currentPage={currentPage} />
+      <Suspense falback={<div>Loading...</div>}>
+        <AdminBlogPagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+        />
+      </Suspense>
     </div>
   );
 }

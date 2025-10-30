@@ -10,8 +10,9 @@ import {
   updateCommentStatus,
   updatePostStatus,
   updateUserRole,
-  updateUserStatus,
+  updateUserStatus
 } from "../controllers/admin.controller.js";
+import { postDeleteById, singlePost } from "../controllers/post.controllers.js";
 import { isAdmin } from "../middlewares/roleAuth.js";
 import { verifyUser } from "../middlewares/verifyuser.js";
 
@@ -30,6 +31,8 @@ router.get("/posts", getAllPosts);
 router.put("/posts/:id/status", updatePostStatus);
 router.get("/get/pending-posts", getAllPendingPost);
 router.get("/get/without-pending-posts", getWithoutPendingPost);
+router.delete("/post/delete/:id", postDeleteById);
+router.get("/get/:id", singlePost);
 
 router.put("/comments/:commentId/status", updateCommentStatus);
 router.delete("/comments/:commentId", deleteComment);

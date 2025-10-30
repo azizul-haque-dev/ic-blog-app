@@ -4,9 +4,8 @@ import PostContent from "@/app/Components/PostContent";
 export default async function PostDetails({ params }) {
   const { id } = await params;
   const postData = await getSinglePost({ postId: id });
-  console.log({ postData });
   const post = postData?.post;
-
+  console.log(post.comments);
   if (!post) {
     return (
       <div className="text-center py-20 text-gray-600 text-xl">

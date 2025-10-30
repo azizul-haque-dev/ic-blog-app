@@ -5,6 +5,8 @@ import { generateResetToken } from "../services/token.services.js";
 import cloudinary from "../utils/coudinary.config.js";
 import { PASSWORD_RESET_REQUEST_TEMPLATE } from "../utils/emailTemplete.js";
 
+import mongoose from "mongoose";
+import { CommentModel } from "../models/comments.models.js";
 import {
   checkEmailExists,
   getUserStats,
@@ -94,12 +96,10 @@ const resetPassword = async (req, res) => {
     user.password = newPassword;
     await user.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Password has been reset successfully."
-      });
+    res.status(200).json({
+      success: true,
+      message: "Password has been reset successfully."
+    });
   } catch (err) {
     console.error("Reset Password Error:", err);
     res.status(500).json({ message: "Server error. Please try again later." });
@@ -262,8 +262,42 @@ const getUserStatistics = async (req, res) => {
     });
   }
 };
+const addComment = async (req, res) => {
+  try {
+    const { postId, content } = req.body;
+    const id = req.user.id;
+    const userId = new mongoose.Types.ObjectId(id);
+    const postObjectId = new mongoose.Types.ObjectId(postId);
+
+    if (!postId || !content) {
+      return res.status(400).json({
+        success: false,
+        message: "postId and content are required"
+      });
+    }
+
+    const newComment = await CommentModel.create({
+      postId: postObjectId,
+      userId,
+      content
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Comment added successfully",
+      data: newComment
+    });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to add comment"
+    });
+  }
+};
 
 export {
+  addComment,
   forgetPassword,
   getUserProfile,
   getUserStatistics,

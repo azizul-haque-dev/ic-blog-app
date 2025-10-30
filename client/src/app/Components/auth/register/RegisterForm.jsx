@@ -23,9 +23,9 @@ function RegisterForm() {
           method: "POST",
           credentials: "include",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({ name, email, password })
         }
       );
       const data = await res.json();
@@ -104,7 +104,8 @@ function RegisterForm() {
 
       <button
         type="submit"
-        className="w-full bg-[#7050ff] text-white py-2 rounded-lg hover:bg-[#7033ff] transition duration-200 font-semibold"
+        disabled={isLoading}
+        className="w-full bg-[#7050ff] text-white py-2 rounded-lg hover:bg-[#7033ff] transition duration-200 font-semibold disabled:bg-gray-400"
       >
         {!isLoading ? "Sign Up" : "Creating New user..."}
       </button>

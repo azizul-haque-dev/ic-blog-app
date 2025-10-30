@@ -147,8 +147,9 @@ export const updatePostImage = async (req, res) => {
       });
     }
     console.log(req.file, "update image");
+    const postId = new mongoose.Types.ObjectId(id);
 
-    const post = await PostModel.findById(id);
+    const post = await PostModel.findById(postId);
     if (!post) {
       return res.status(404).json({
         success: false,
@@ -283,6 +284,7 @@ export const getPosts = async (req, res) => {
 export const singlePost = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id, "id");
     const postId = new mongoose.Types.ObjectId(id);
     const post = await PostModel.findById(postId)
       .populate("userId", "name email avatarUrl") // post user

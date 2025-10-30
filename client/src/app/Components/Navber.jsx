@@ -10,6 +10,8 @@ function Navbar({ user }) {
   const redirectTo = user?.role === "user" ? "/user" : "/admin";
   const logout = useLogout();
 
+  console.log(user);
+
   return (
     <nav className="mx-auto mt-4 sticky top-4 z-50 px-3">
       <div className="max-w-7xl mx-auto bg-white rounded-xl  px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between shadow-md">
@@ -63,9 +65,9 @@ function Navbar({ user }) {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="btn btn-ghost btn-circle avatar flex items-center justify-center"
               >
-                {user.imageUrl ? (
+                {user.avatarUrl ? (
                   <Image
-                    src={user.imageUrl}
+                    src={user.avatarUrl}
                     alt="Profile"
                     width={40}
                     height={40}

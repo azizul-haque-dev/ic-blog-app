@@ -10,16 +10,8 @@ import {
 //  Like a post
 export const likePost = async (req, res) => {
   try {
-    const { postId } = req.params;
-    const userId = req.user.id;
-
-    // Validate post ID
-    if (!mongoose.Types.ObjectId.isValid(postId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid post ID"
-      });
-    }
+    const userId = new mongoose.Types.ObjectId(req.user.id);
+    const postId = new mongoose.Types.ObjectId(req.params.postId);
 
     // Check if post exists
     const post = await PostModel.findById(postId);
@@ -55,16 +47,8 @@ export const likePost = async (req, res) => {
 //  Dislike a post
 export const dislikePost = async (req, res) => {
   try {
-    const { postId } = req.params;
-    const userId = req.user.id;
-
-    // Validate post ID
-    if (!mongoose.Types.ObjectId.isValid(postId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid post ID"
-      });
-    }
+    const userId = new mongoose.Types.ObjectId(req.user.id);
+    const postId = new mongoose.Types.ObjectId(req.params.postId);
 
     // Check if post exists
     const post = await PostModel.findById(postId);
