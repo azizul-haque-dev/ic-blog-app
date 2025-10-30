@@ -8,7 +8,7 @@ export function useLogout() {
   const logout = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/logout`,
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/session`,
         {
           method: "POST",
           headers: {
@@ -19,8 +19,6 @@ export function useLogout() {
       );
 
       const data = await res.json();
-      console.log(data);
-
       if (res.ok) {
         toast.success("Logout successful");
         router.push("/login");

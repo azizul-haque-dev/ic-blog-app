@@ -1,5 +1,6 @@
 "use client";
 
+import { setAuthCookie } from "@/actions/session.action";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -33,8 +34,11 @@ function LoginForm() {
         const errorMessage = data?.message || "Login failed";
         toast.error(errorMessage);
         setError(errorMessage);
-        return { success: false, message: errorMessage }; // Stop here
+        return { success: false, message: errorMessage };
       }
+
+      console.log(data);
+      await setAuthCookie(data?.user);
 
       //  Only reached when login succeeds
       // Redirect based on role
