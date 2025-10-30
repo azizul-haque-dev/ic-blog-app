@@ -142,7 +142,7 @@ const verifyEmail = async (req, res) => {
     res.clearCookie("emailToken", {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "none" : "lax"
+      sameSite: "lax"
     });
 
     return res
@@ -213,7 +213,7 @@ const isProduction = process.env.NODE_ENV === "production";
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
+      sameSite: "lax",
       path: "/"
     };
 
@@ -292,7 +292,7 @@ const refreshToken = async (req, res) => {
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: "lax",
       maxAge: 15 * 60 * 1000 // 15 min
     });
 
