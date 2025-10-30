@@ -11,6 +11,7 @@ import {
 
 import { validatePassword } from "../services/auth.services.js";
 import { VERIFICATION_EMAIL_TEMPLATE } from "../utils/emailTemplete.js";
+import path from "path";
 const loginSchema = z.object({
   email: z
     .string({
@@ -136,10 +137,12 @@ const verifyEmail = async (req, res) => {
     user.verificationTokenExpireAt = null;
     await user.save();
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.clearCookie("emailToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none"
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax"
     });
 
     return res
@@ -204,12 +207,14 @@ const loginUser = async (req, res) => {
     //  Generate Access and Refresh Tokens
     const accessToken = generateAccessToken(userData);
     // const refreshToken = generateRefreshToken(user._id);
-
+// isProduction
+const isProduction = process.env.NODE_ENV === "production";
     // Set tokens in secure, httpOnly cookies
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax"
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      path: "/"
     };
 
     res.cookie("accessToken", accessToken, {
@@ -236,11 +241,12 @@ const loginUser = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
   try {
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax"
     };
 
     // Clear the accessToken cookie
