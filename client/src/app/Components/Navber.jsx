@@ -9,9 +9,7 @@ function Navbar({ user }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const redirectTo = user?.role === "user" ? "/user" : "/admin";
   const logout = useLogout();
-
-  console.log(user);
-
+  console.log(user, "user");
   return (
     <nav className="mx-auto mt-4 sticky top-4 z-50 px-3">
       <div className="max-w-7xl mx-auto bg-white rounded-xl  px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between shadow-md">
@@ -39,20 +37,20 @@ function Navbar({ user }) {
                 Blog
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link
                 href="/contact"
                 className="text-[#3F404D] font-semibold hover:text-[#7050ff]"
               >
                 Contact
               </Link>
-            </li> */}
+            </li>
           </ul>
         </div>
 
         {/* Auth / Profile */}
         <div className="flex gap-2 items-center">
-          {!user ? (
+          {!user?.id ? (
             <Link
               href="/login"
               className="px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-black font-semibold text-sm sm:text-base"
@@ -86,7 +84,14 @@ function Navbar({ user }) {
                     <Link href={`${redirectTo}`}>Profile</Link>
                   </li>
                   <li>
-                    <button onClick={logout}>Logout</button>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsDropdownOpen(!isDropdownOpen);
+                      }}
+                    >
+                      Logout
+                    </button>
                   </li>
                 </ul>
               )}

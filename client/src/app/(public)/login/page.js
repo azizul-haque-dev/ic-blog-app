@@ -1,9 +1,17 @@
 import LoginComponent from "@/app/Components/auth/login/LoginComponent";
 import LoginForm from "@/app/Components/auth/login/LoginForm";
 import { isUser } from "@/services/verify.accessToken";
+import { redirect } from "next/navigation";
 
 async function LoginPage() {
-  await isUser();
+  const getUser = await isUser();
+  if (getUser.success) {
+    if (getUser?.user.role === "user") {
+      redirect("/user");
+    } else {
+      redirect("admin");
+    }
+  }
 
   return (
     <>

@@ -395,3 +395,22 @@ export const deleteUserPost = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error." });
   }
 };
+
+export const getPostsForStaticGeneration = async (req, res) => {
+  try {
+    // Fetch posts with filter, pagination, and sorting
+    const posts = await PostModel.find({}).lean();
+
+    res.status(200).json({
+      success: true,
+      message: "Posts fetched successfully",
+      posts
+    });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};

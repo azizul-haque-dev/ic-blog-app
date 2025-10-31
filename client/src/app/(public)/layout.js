@@ -4,6 +4,7 @@ import Navber from "../Components/Navber";
 
 export default async function PublicLayout({ children }) {
   const getUser = await isUser();
+  console.log({ getUser });
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">

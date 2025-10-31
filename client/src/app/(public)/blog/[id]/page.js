@@ -1,6 +1,14 @@
 import { getSinglePost } from "@/actions/post.action";
 import PostContent from "@/app/Components/PostContent";
 import { notFound } from "next/navigation";
+export async function generateStaticParams() {
+  const allPost = await fetch(`${process.env.NEXT_APP_SERVER}/post/get/static`);
+  const data = await allPost.json();
+  return data?.posts?.map((post) => ({
+    id: post._id.toString()
+  }));
+}
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const { post } = await getSinglePost({ postId: id });

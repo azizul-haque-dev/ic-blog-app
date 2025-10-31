@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createPost,
   getPosts,
+  getPostsForStaticGeneration,
   getUserAllPost,
   postDeleteById,
   singlePost,
@@ -14,6 +15,7 @@ import { verifyUser } from "../middlewares/verifyuser.js";
 
 const router = Router();
 router.get("/get", getPosts);
+router.get("/get/static", getPostsForStaticGeneration);
 router.get("/get/:id", singlePost);
 
 router.use(verifyUser, isUser);

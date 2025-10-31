@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteAuthToken } from "@/actions/session.action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Timer from "./Timer";
@@ -8,7 +9,7 @@ export default function VerifyEmailForm() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(120);
+  const [timeLeft, setTimeLeft] = useState(900);
   const [success, setSuccess] = useState("");
   const router = useRouter();
 
@@ -49,6 +50,7 @@ export default function VerifyEmailForm() {
         }
       } else {
         setSuccess("Verification successful! Redirecting to login...");
+        await deleteAuthToken();
         setTimeout(() => router.push("/login"), 3000);
       }
     } catch (err) {

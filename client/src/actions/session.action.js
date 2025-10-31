@@ -48,5 +48,5 @@ export async function deleteAuthToken() {
     cookieJar.delete(cookie.name);
   });
 
-  redirect("/auth/login");
+  redirect("/login");
 }
