@@ -11,7 +11,6 @@ import {
 
 import { validatePassword } from "../services/auth.services.js";
 import { VERIFICATION_EMAIL_TEMPLATE } from "../utils/emailTemplete.js";
-import path from "path";
 const loginSchema = z.object({
   email: z
     .string({
@@ -85,14 +84,10 @@ const registerUser = async (req, res) => {
       verificationTokenExpireAt: Date.now() + 5 * 60 * 1000
     });
     await user.save();
-    res.cookie("emailToken", emailToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 5 * 60 * 1000
-    });
+
     return res.status(201).json({
       success: true,
+      email,
       message: "A code has been sent to your account, please verify it."
     });
   } catch (error) {
@@ -207,8 +202,8 @@ const loginUser = async (req, res) => {
     //  Generate Access and Refresh Tokens
     const accessToken = generateAccessToken(userData);
     // const refreshToken = generateRefreshToken(user._id);
-// isProduction
-const isProduction = process.env.NODE_ENV === "production";
+    // isProduction
+    const isProduction = process.env.NODE_ENV === "production";
     // Set tokens in secure, httpOnly cookies
     const cookieOptions = {
       httpOnly: true,

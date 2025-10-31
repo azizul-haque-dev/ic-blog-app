@@ -18,7 +18,25 @@ export async function setAuthCookie(data) {
     httpOnly: true,
     path: "/",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24,
+    maxAge: 60 * 15,
+    sameSite: "lax"
+  });
+}
+export async function setEmailToken(data) {
+  const cookieStore = await cookies();
+
+  const token = jwt.sign(data, process.env.ACCESS_SECRET, {
+    expiresIn: "15m"
+  });
+
+  // set the cookie
+  cookieStore.set({
+    name: "emailToken",
+    value: token,
+    httpOnly: true,
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 15,
     sameSite: "lax"
   });
 }

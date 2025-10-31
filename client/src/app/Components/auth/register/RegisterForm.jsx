@@ -1,4 +1,5 @@
 "use client";
+import { setEmailToken } from "@/actions/session.action";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,6 +35,7 @@ function RegisterForm() {
         setIsLoading(false);
         return;
       }
+      await setEmailToken({ email });
       setTimeout(() => {
         toast.success(
           "Registration successful. Please Check verify your email"
