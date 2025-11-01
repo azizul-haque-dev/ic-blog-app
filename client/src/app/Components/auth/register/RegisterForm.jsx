@@ -1,5 +1,7 @@
 "use client";
+import { sendEmail } from "@/actions/sendEmail";
 import { setEmailToken } from "@/actions/session.action";
+import { VERIFICATION_EMAIL_TEMPLATE } from "@/services/emaiTempletes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -35,7 +37,13 @@ function RegisterForm() {
         setIsLoading(false);
         return;
       }
+
       await setEmailToken({ email });
+      await sendEmail({
+        to: email,
+        subject: "Verify your account",
+        html: VERIFICATION_EMAIL_TEMPLATE(data?.code)
+      });
       setTimeout(() => {
         toast.success(
           "Registration successful. Please Check verify your email"

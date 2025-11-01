@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
 import { UserModel } from "../models/user.models.js";
-import { sendEmail } from "../services/sendEmail.js";
 import { generateResetToken } from "../services/token.services.js";
 import cloudinary from "../utils/coudinary.config.js";
-import { PASSWORD_RESET_REQUEST_TEMPLATE } from "../utils/emailTemplete.js";
 
 import mongoose from "mongoose";
 import { CommentModel } from "../models/comments.models.js";
@@ -38,18 +36,19 @@ const forgetPassword = async (req, res) => {
     const resetLink = `${process.env.APP_URL}/reset-password/${token}`;
 
     // Prepare email template
-    const template = PASSWORD_RESET_REQUEST_TEMPLATE(resetLink);
+    // const template = PASSWORD_RESET_REQUEST_TEMPLATE(resetLink);
 
     //Send email
-    await sendEmail({
-      to: email,
-      subject: "Reset your IC Blog App password",
-      html: template
-    });
+    // await sendEmail({
+    //   to: email,
+    //   subject: "Reset your IC Blog App password",
+    //   html: template
+    // });
 
     // Send success response
     res.status(200).json({
       success: true,
+      resetLink,
       message: " You will receive a reset link. Please check your email"
     });
   } catch (error) {

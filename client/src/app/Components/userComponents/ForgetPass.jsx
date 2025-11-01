@@ -1,4 +1,6 @@
 "use client";
+import { sendEmail } from "@/actions/sendEmail";
+import { PASSWORD_RESET_REQUEST_TEMPLATE } from "@/services/emaiTempletes";
 import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -40,6 +42,12 @@ function ForgetPass() {
       console.log(data);
 
       if (data?.success) {
+        //  Send email
+        await sendEmail({
+          to: email,
+          subject: "Reset your IC Blog App password",
+          html: PASSWORD_RESET_REQUEST_TEMPLATE(data?.resetLink)
+        });
         setEmail("");
         toast.success(data?.message);
         setSuccessMessage(

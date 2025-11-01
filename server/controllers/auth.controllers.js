@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import { z } from "zod";
 import { UserModel } from "../models/user.models.js";
-import { sendEmail } from "../services/sendEmail.js";
 import {
   generateAccessToken,
   generateVerifyEmailToken,
@@ -10,7 +9,6 @@ import {
 } from "../services/token.services.js";
 
 import { validatePassword } from "../services/auth.services.js";
-import { VERIFICATION_EMAIL_TEMPLATE } from "../utils/emailTemplete.js";
 const loginSchema = z.object({
   email: z
     .string({
@@ -64,23 +62,24 @@ const registerUser = async (req, res) => {
         .json({ success: false, message: "User already exists" });
     }
 
-    const emailVerificationToken = crypto
-      .randomBytes(32)
-      .toString("hex")
-      .slice(0, 6);
+    function generate6DigitCode() {
+      const n = crypto.randomInt(0, 1_000_000);
+      return String(n).padStart(6, "0");
+    }
+    const code = generate6DigitCode();
 
     const emailToken = generateVerifyEmailToken({ email });
 
-    await sendEmail({
-      to: email,
-      subject: "Verify your account",
-      html: VERIFICATION_EMAIL_TEMPLATE(emailVerificationToken)
-    });
+    // await sendEmail({
+    //   to: email,
+    //   subject: "Verify your account",
+    //   html: VERIFICATION_EMAIL_TEMPLATE(emailVerificationToken)
+    // });
     const user = new UserModel({
       name,
       email,
       password,
-      emailVerificationToken,
+      emailVerificationToken: code,
       verificationTokenExpireAt: Date.now() + 5 * 60 * 1000
     });
     await user.save();
@@ -88,6 +87,7 @@ const registerUser = async (req, res) => {
     return res.status(201).json({
       success: true,
       email,
+      code,
       message: "A code has been sent to your account, please verify it."
     });
   } catch (error) {
@@ -101,12 +101,14 @@ const verifyEmail = async (req, res) => {
   try {
     const token = req.cookies.emailToken;
     const { code } = req.body;
+    console.log({ token, code });
 
     if (!token) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const { email } = verifyEmailToken(token);
+
     const user = await UserModel.findOne({ email });
 
     if (!user) {
@@ -208,7 +210,7 @@ const loginUser = async (req, res) => {
     const cookieOptions = {
       httpOnly: true,
       secure: true,
-      sameSite: "lax",
+      sameSite: isProduction ? "none" : "lax",
       path: "/"
     };
 
@@ -225,7 +227,8 @@ const loginUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Logged in successfully",
-      user: userData
+      user: userData,
+      accessToken: accessToken
     });
   } catch (error) {
     console.error("Error logging in user:", error);
