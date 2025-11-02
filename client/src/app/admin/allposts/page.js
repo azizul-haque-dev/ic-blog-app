@@ -10,9 +10,7 @@ async function Page({ searchParams }) {
   const currentPage = Number(page) || 1;
 
   const postData = await getAllAdminBlogPost({
-    page: currentPage,
-    category: "",
-    search: ""
+    page: currentPage
   });
 
   const posts = postData?.posts || [];

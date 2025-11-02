@@ -26,8 +26,8 @@ export async function getSinglePost({ postId }) {
   return data;
 }
 
-export async function getAllAdminBlogPost({ page, search, category }) {
-  const url = `${process.env.NEXT_APP_SERVER}/admin/posts/all?page=${page}&search=${search}&category=${category}`;
+export async function getAllAdminBlogPost({ page }) {
+  const url = `${process.env.NEXT_APP_SERVER}/admin/posts/all?page=${page}`;
   const options = {
     method: "GET",
     next: {
