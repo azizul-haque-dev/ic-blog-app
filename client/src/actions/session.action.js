@@ -53,8 +53,9 @@ export async function deleteAuthToken() {
   const cookieJar = await cookies();
 
   //  Better approach - only delete specific cookies
-  cookieJar.delete("accessToken");
-  cookieJar.delete("emailToken");
+ cookieJar.getAll().forEach((cookie) => {
+    cookieJar.delete(cookie.name);
+  });
 
   redirect("/login");
 }
