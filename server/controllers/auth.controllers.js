@@ -97,22 +97,34 @@ const registerUser = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
-const verifyEmail = async (req, res) => {
+
+import { UserModel } from "../models/user.models.js";
+
+export const verifyEmail = async (req, res) => {
   try {
     const token = req.cookies.emailToken;
     const { code } = req.body;
-    console.log({ token, code });
-
     if (!token) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    const { email } = verifyEmailToken(token);
+    // 🔹 Verify token validity
+    let decoded;
+    try {
+      decoded = verifyEmailToken(token);
+    } catch (err) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid or expired token" });
+    }
 
+    const { email } = decoded;
     const user = await UserModel.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
     if (user.isVerified) {
@@ -121,33 +133,40 @@ const verifyEmail = async (req, res) => {
         .json({ success: true, message: "Email already verified" });
     }
 
+    if (!user.emailVerificationToken || !user.verificationTokenExpireAt) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No verification token found" });
+    }
+
     if (Date.now() > user.verificationTokenExpireAt) {
-      return res.status(401).json({ success: false, message: "Token expired" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Verification code expired" });
     }
 
     if (user.emailVerificationToken !== code) {
-      return res.status(401).json({ success: false, message: "Invalid code" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid verification code" });
     }
 
+    // ✅ Update user verification fields
     user.isVerified = true;
     user.emailVerificationToken = null;
     user.verificationTokenExpireAt = null;
     await user.save();
 
-    const isProduction = process.env.NODE_ENV === "production";
-
-    res.clearCookie("emailToken", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax"
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully"
     });
-
-    return res
-      .status(200)
-      .json({ success: true, message: "Email verified successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("Verify email error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
   }
 };
 
