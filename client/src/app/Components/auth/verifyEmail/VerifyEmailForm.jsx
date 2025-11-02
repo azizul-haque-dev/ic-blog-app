@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { deleteAuthToken } from "@/actions/session.action";
 import Timer from "./Timer";
+import toast from "react-hot-toast";
 
 export default function VerifyEmailForm() {
   const [code, setCode] = useState("");
@@ -24,21 +25,11 @@ export default function VerifyEmailForm() {
       });
 
       const data = await res.json();
+ 
 
       if (!res.ok) {
-        let msg = data.message || "Verification failed. Please try again.";
-
-        if (data.message === "Token expired")
-          msg = "Verification code has expired. Please request a new one.";
-        else if (data.message === "Invalid code")
-          msg = "Invalid verification code. Please try again.";
-        else if (res.status === 401)
-          msg = "Session expired. Please register again.";
-
-        setStatus({ loading: false, error: msg, success: "" });
-
-        if (res.status === 401 && data.message !== "Invalid code")
-          setTimeout(() => (window.location.href = "/register"), 3000);
+     toast.error(data.message);
+       setStatus({ loading: false, error: data?.message, success: "" });
         return;
       }
 

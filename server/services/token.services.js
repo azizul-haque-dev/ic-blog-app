@@ -23,14 +23,26 @@ export function generateRefreshToken(userId) {
   }
 }
 
+
+
 export function generateVerifyEmailToken(email) {
   try {
-    return jwt.sign(email, process.env.EMAIL_SECRET, { expiresIn: "5m" });
+    const payload = { email }; 
+    const secret = process.env.EMAIL_SECRET;
+
+    if (!secret) {
+      throw new Error("EMAIL_SECRET is missing from environment variables");
+    }
+
+    // Token expires in 5 minutes
+    return jwt.sign(payload, secret, { expiresIn: "5m" });
   } catch (error) {
     console.error("Error generating email verification token:", error);
     throw new Error("Failed to generate email verification token");
   }
 }
+
+
 export function generateResetToken(email) {
   try {
     return jwt.sign(email, process.env.JWT_SECRET, { expiresIn: "10m" });

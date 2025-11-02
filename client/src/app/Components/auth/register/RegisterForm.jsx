@@ -38,7 +38,7 @@ function RegisterForm() {
         return;
       }
 
-      await setEmailToken({ email });
+      await setEmailToken( email );
       await sendEmail({
         to: email,
         subject: "Verify your account",

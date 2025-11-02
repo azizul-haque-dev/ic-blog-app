@@ -26,27 +26,35 @@ export async function setAuthCookie(data) {
   return { success: true };
 }
 
-export async function setEmailToken(data) {
+export async function setEmailToken(email) {
   const cookieStore = await cookies();
   const isProduction = process.env.NODE_ENV === "production";
 
-  //  CHANGED THIS LINE - Use EMAIL_SECRET
-  const token = jwt.sign(data, process.env.EMAIL_SECRET, {
-    expiresIn: "15m"
-  });
+  try {
+    if (!process.env.EMAIL_SECRET) {
+      throw new Error("EMAIL_SECRET is not defined");
+    }
 
-  // set the cookie
-  cookieStore.set({
-    name: "emailToken",
-    value: token,
-    httpOnly: true,
-    path: "/",
-    secure: isProduction,
-    maxAge: 60 * 15,
-    sameSite: isProduction ? "none" : "lax"
-  });
+    const token = jwt.sign({ email }, process.env.EMAIL_SECRET, {
+      expiresIn: "15m"
+    });
 
-  return { success: true };
+    // ✅ Set secure HTTP-only cookie
+    cookieStore.set({
+      name: "emailToken",
+      value: token,
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      path: "/",
+      maxAge: 60 * 15
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error setting email token:", error);
+    return { success: false, message: "Failed to set email token" };
+  }
 }
 
 export async function deleteAuthToken() {
