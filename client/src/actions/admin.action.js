@@ -40,7 +40,7 @@ export async function createUserByAdmin({ name, email, password }) {
     revalidatePath("/admin/allusers");
   }
 
-  return { success: true };
+  return {success:true};
 }
 export async function updateUserByAdmin({ userId, status }) {
   const url = `${process.env.NEXT_APP_SERVER}/admin/users/${userId}/status`;

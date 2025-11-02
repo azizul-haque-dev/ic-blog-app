@@ -63,7 +63,7 @@ function CreateUser() {
         disabled={isLoading}
         className="w-full bg-[#7050ff] text-white py-2 rounded-lg hover:bg-[#7033ff] transition duration-200"
       >
-        {isLoading ? "Creating..." : "Sign Up"}
+        {isLoading ? "Creating..." : "Create User"}
       </button>
     </form>
   );

@@ -51,14 +51,14 @@ export const getAllUsers = async (req, res) => {
 
 export const createUserByAdmin = async (req, res) => {
   try {
-    const parseBody = userCreationSchema.safeParse(req.body);
-    if (!parseBody.success) {
+    const {email,password,name}=req.body
+    if (!email||password||name) {
       return res
         .status(400)
-        .json({ success: false, errors: parseBody.error.issues });
+        .json({ success: false, message:'All Field is required' });
     }
 
-    const { email } = parseBody.data;
+
 
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
@@ -68,7 +68,7 @@ export const createUserByAdmin = async (req, res) => {
       });
     }
 
-    const newUser = await createNewUser(parseBody.data);
+    const newUser = await createNewUser({email,name,password});
     return res.status(201).json({
       success: true,
       message: "User created successfully.",
