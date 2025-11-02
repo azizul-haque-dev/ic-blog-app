@@ -61,7 +61,7 @@ function CreateUser() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-[#7050ff] text-white py-2 rounded-lg hover:bg-[#7033ff] transition duration-200"
+        className="w-full bg-[#7050ff] text-white disabled:bg-gray-400 py-2 rounded-lg hover:bg-[#7033ff] transition duration-200 "
       >
         {isLoading ? "Creating..." : "Sign Up"}
       </button>
