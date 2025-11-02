@@ -98,8 +98,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-import { UserModel } from "../models/user.models.js";
-
 export const verifyEmail = async (req, res) => {
   try {
     const token = req.cookies.emailToken;
