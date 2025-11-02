@@ -8,28 +8,12 @@ export function useLogout() {
 
   const logout = async () => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/session`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          credentials: "include"
-        }
-      );
-
-      const data = await res.json();
-       await deleteAuthToken()
-      if (res.ok) {
-        toast.success("Logout successful");
-        router.push("/login");
-      } else {
-        toast.error("Logout failed");
-      }
+      await deleteAuthToken();
+      toast.success("Logout successful");
+      router.push("/login");
     } catch (error) {
-      console.error("Logout error:", error);
-      toast.error("Failed to logout. Try again.");
+      console.error("Logout failed:", error);
+      toast.error("Logout failed");
     }
   };
 
