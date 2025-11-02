@@ -6,7 +6,7 @@ import { deleteAuthToken } from "@/actions/session.action";
 import Timer from "./Timer";
 import toast from "react-hot-toast";
 
-export default function VerifyEmailForm() {
+export default function VerifyEmailForm({token}) {
   const [code, setCode] = useState("");
   const [status, setStatus] = useState({ loading: false, error: "", success: "" });
   const [timeLeft, setTimeLeft] = useState(900);
@@ -19,9 +19,8 @@ export default function VerifyEmailForm() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verify-email`, {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code,token }),
       });
 
       const data = await res.json();
@@ -32,6 +31,7 @@ export default function VerifyEmailForm() {
        setStatus({ loading: false, error: data?.message, success: "" });
         return;
       }
+      console.log(data.message)
 
       // ✅ success
       setStatus({ loading: false, error: "", success: "Verification successful! Redirecting..." });

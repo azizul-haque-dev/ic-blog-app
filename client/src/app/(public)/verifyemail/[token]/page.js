@@ -4,7 +4,7 @@ import { isUser } from "@/services/verify.accessToken";
 import { redirect } from "next/navigation";
 import React from "react";
 
-async function VerifyEmailPage() {
+async function VerifyEmailPage({params}) {
   const getUser = await isUser();
   if (getUser.success) {
     if (getUser?.user.role === "user") {
@@ -13,10 +13,11 @@ async function VerifyEmailPage() {
       redirect("admin");
     }
   }
+    const { token } = await params;
   return (
     <>
       <VerifyEmailComp>
-        <VerifyEmailForm />
+        <VerifyEmailForm token={token} />
       </VerifyEmailComp>
     </>
   );

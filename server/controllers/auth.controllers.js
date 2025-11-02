@@ -88,6 +88,7 @@ const registerUser = async (req, res) => {
       success: true,
       email,
       code,
+      emailToken,
       message: "A code has been sent to your account, please verify it."
     });
   } catch (error) {
@@ -100,8 +101,7 @@ const registerUser = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   try {
-    const token = req.cookies.emailToken;
-    const { code } = req.body;
+    const { code, token } = req.body;
     if (!token) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }

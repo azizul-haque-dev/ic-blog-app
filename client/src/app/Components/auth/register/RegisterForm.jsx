@@ -38,7 +38,7 @@ function RegisterForm() {
         return;
       }
 
-      await setEmailToken( email );
+      // await setEmailToken( email );
       await sendEmail({
         to: email,
         subject: "Verify your account",
@@ -48,7 +48,7 @@ function RegisterForm() {
         toast.success(
           "Registration successful. Please Check verify your email"
         );
-        router.push("/verifyemail");
+        router.push(`/verifyemail/${data?.emailToken}`);
       }, 2000);
     } catch (error) {
       setErrorMessage(error.message);
