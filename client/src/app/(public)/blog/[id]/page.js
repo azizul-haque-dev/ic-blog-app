@@ -27,7 +27,7 @@ export default async function PostDetails({ params }) {
   const { id } = await params;
   const postData = await getSinglePost({ postId: id });
   const post = postData?.post;
-  console.log(post.comments);
+  
   if (!post) {
     notFound();
   }

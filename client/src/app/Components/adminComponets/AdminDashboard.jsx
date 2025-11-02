@@ -22,7 +22,7 @@ const AdminDashboard = async () => {
   return (
     <div className="flex flex-col min-h-screen text-gray-800">
       <main className="flex-1 p-10">
-        <h2 className="text-3xl font-semibold mb-8">User Dashboard</h2>
+        <h2 className="text-3xl font-semibold mb-8">Admin Dashboard</h2>
 
         {/* Profile Section */}
         <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">

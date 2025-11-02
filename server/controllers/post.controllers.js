@@ -94,10 +94,10 @@ export const createPost = async (req, res) => {
 
 //  Update Post text fields only
 export const updatePost = async (req, res) => {
-  console.log(req.body, "body");
+  
   try {
     const { title, content, categories } = postUpdateSchema.parse(req.body);
-    console.log(title, content, categories, "form server");
+   
     const { id } = req.params;
     const postId = new mongoose.Types.ObjectId(id);
 
@@ -146,7 +146,7 @@ export const updatePostImage = async (req, res) => {
         message: "No file uploaded!"
       });
     }
-    console.log(req.file, "update image");
+   
     const postId = new mongoose.Types.ObjectId(id);
 
     const post = await PostModel.findById(postId);
@@ -224,7 +224,7 @@ export const getPosts = async (req, res) => {
 
     // Extract filters
     const { category, search } = req.query;
-    console.log({ category, search, page });
+   
 
     //  Build dynamic filter object
     const filter = { status: "approved" };
@@ -284,7 +284,7 @@ export const getPosts = async (req, res) => {
 export const singlePost = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id, "id");
+ 
     const postId = new mongoose.Types.ObjectId(id);
     const post = await PostModel.findById(postId)
       .populate("userId", "name email avatarUrl") // post user

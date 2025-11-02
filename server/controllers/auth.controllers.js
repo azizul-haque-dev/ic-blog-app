@@ -285,7 +285,7 @@ const refreshToken = async (req, res) => {
       req.cookies?.refreshToken ||
       req.headers["authorization"]?.split(" ")[1] ||
       null;
-    console.log("refresh token token", token);
+  
 
     if (!token) {
       return res

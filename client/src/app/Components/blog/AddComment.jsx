@@ -29,7 +29,7 @@ function AddComment({ post }) {
       // clear text
       setContent("");
     } catch (error) {
-      console.log(error);
+    
     } finally {
       setIsLoading(false);
     }

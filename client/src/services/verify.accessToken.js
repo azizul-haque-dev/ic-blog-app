@@ -10,7 +10,7 @@ export async function isUser() {
 
     // Check if token exists
     if (!token) {
-      console.log('❌ [isUser] No token found');
+     
       return {
         success: false,
         message: "No access token",
@@ -21,7 +21,7 @@ export async function isUser() {
     // Verify token
     const user = jwt.verify(token, process.env.ACCESS_SECRET);
     
-    console.log('✅ [isUser] Token verified:', { email: user.email, role: user.role });
+   
     
     return { 
       success: true, 

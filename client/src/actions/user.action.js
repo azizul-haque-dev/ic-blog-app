@@ -30,7 +30,7 @@ export async function addCommentByUser({ postId, content }) {
   const url = `${process.env.NEXT_APP_SERVER}/user/add/comment`;
   const options = { method: "POST", body: JSON.stringify({ postId, content }) };
   const data = await getData({ url, options });
-  console.log(data, "adding comment");
+  
   if (data.success) {
     revalidatePath(`/blog/${postId}`);
     revalidatePath(`/admin/allposts/${postId}`);
@@ -42,7 +42,7 @@ export async function addLikeByUser({ postId }) {
   const url = `${process.env.NEXT_APP_SERVER}/like/${postId}/like`;
   const options = { method: "POST" };
   const data = await getData({ url, options });
-  console.log(data, "adding comment");
+ 
   if (data.success) {
     revalidatePath(`/blog/${postId}`);
     revalidatePath(`/admin/allposts/${postId}`);
@@ -54,7 +54,7 @@ export async function addDisLikeByUser({ postId }) {
   const url = `${process.env.NEXT_APP_SERVER}/like/${postId}/dislike`;
   const options = { method: "POST" };
   const data = await getData({ url, options });
-  console.log(data, "adding comment");
+ 
   if (data.success) {
     revalidatePath(`/blog/${postId}`);
     revalidatePath(`/admin/allposts/${postId}`);

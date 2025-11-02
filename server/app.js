@@ -11,7 +11,7 @@ import userRoutes from "./routes/user.route.js";
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
-  console.log("loaded .env file for development");
+ 
 }
 
 const app = express();

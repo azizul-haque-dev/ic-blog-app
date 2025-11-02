@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PostCard({ post }) {
   if (!post) {
-    console.log("PostCard: post undefined, skipping render...");
+  
     return null;
   }
   const { title, content, imageUrl, categories, status, createdAt } = post;

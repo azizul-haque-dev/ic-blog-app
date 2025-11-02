@@ -29,7 +29,7 @@ function LoginForm() {
       } catch (err) {
         //  FIXED: Ignore NEXT_REDIRECT error (it's not actually an error)
         if (err?.message === 'NEXT_REDIRECT' || err?.digest?.startsWith('NEXT_REDIRECT')) {
-          console.log(' Redirect in progress...');
+          
           return; // Don't show error, redirect is working
         }
         

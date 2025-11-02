@@ -333,7 +333,7 @@ export const getAdminPost = async (req, res) => {
 
     // Extract filters
     const { category, search } = req.query;
-    console.log({ category, search, page });
+    
 
     //  Build dynamic filter object
     const filter = { status: "approved" };

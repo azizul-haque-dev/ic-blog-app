@@ -56,7 +56,7 @@ function ResetPasswordForm({ token }) {
       setLoading(false);
     }
   };
-  console.log({ token });
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center">

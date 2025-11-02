@@ -22,7 +22,7 @@ export async function OPTIONS() {
 export async function GET(request) {
   try {
     const sessionCookie = request.cookies.get("accessToken")?.value;
-    console.log({ sessionCookie }, "session");
+    
 
     if (!sessionCookie) {
       return cors(

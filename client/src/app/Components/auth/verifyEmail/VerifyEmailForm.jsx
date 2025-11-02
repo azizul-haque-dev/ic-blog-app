@@ -31,7 +31,7 @@ export default function VerifyEmailForm({token}) {
        setStatus({ loading: false, error: data?.message, success: "" });
         return;
       }
-      console.log(data.message)
+   
 
       // ✅ success
       setStatus({ loading: false, error: "", success: "Verification successful! Redirecting..." });
