@@ -1,4 +1,5 @@
 "use client";
+import { deleteAuthToken } from "@/actions/session.action";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
