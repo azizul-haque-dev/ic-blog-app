@@ -1,4 +1,4 @@
-import { getAllBlogPost } from "@/actions/post.action";
+import { getAllAdminBlogPost, getAllBlogPost } from "@/actions/post.action";
 import AdminBlogPagination from "@/app/Components/adminComponets/AdminBlogPagination";
 import PostEditAndDeleteButton from "@/app/Components/adminComponets/PostEditAndDeleteButton";
 import Image from "next/image";
@@ -7,7 +7,11 @@ import { Suspense } from "react";
 
 async function page({ searchParams }) {
   const { page } = await searchParams;
-  const postData = await getAllBlogPost({ page: 1, category: "", search: "" });
+  const postData = await getAllAdminBlogPost({
+    page: 1,
+    category: "",
+    search: ""
+  });
   const posts = postData?.posts || [];
 
   const currentPage = page || 1;

@@ -3,6 +3,7 @@ import {
   createUserByAdmin,
   deleteComment,
   deleteUserbyId,
+  getAdminPost,
   getAllPendingPost,
   getAllPosts,
   getAllUsers,
@@ -27,7 +28,10 @@ router.put("/users/:id/status", updateUserStatus);
 router.put("/users/:id/role", updateUserRole);
 router.delete("/users/:id", deleteUserbyId);
 
+
 router.get("/posts", getAllPosts);
+router.get("/posts/all", getAdminPost);
+
 router.put("/posts/:id/status", updatePostStatus);
 router.get("/get/pending-posts", getAllPendingPost);
 router.get("/get/without-pending-posts", getWithoutPendingPost);

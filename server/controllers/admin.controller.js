@@ -324,3 +324,67 @@ export const updateUserRole = async (req, res) => {
     });
   }
 };
+export const getAdminPost = async (req, res) => {
+  try {
+    // Extract pagination values
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.max(1, parseInt(req.query.limit) || 4);
+    const skip = (page - 1) * limit;
+
+    // Extract filters
+    const { category, search } = req.query;
+    console.log({ category, search, page });
+
+    //  Build dynamic filter object
+    const filter = { status: "approved" };
+
+    // Filter by category (case-insensitive match)
+    if (category) {
+      filter.categories = { $in: [category] };
+    }
+
+    // Search by title or content (Mongo text search)
+    if (search) {
+      filter.$text = { $search: search };
+    }
+
+    // Count total posts matching filter
+    const totalPosts = await PostModel.countDocuments(filter);
+
+    // If no posts found
+    if (totalPosts === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No posts found",
+        posts: [],
+        totalPages: 0,
+        currentPage: 1
+      });
+    }
+
+    const totalPages = Math.ceil(totalPosts / limit);
+    const currentPage = Math.min(page, totalPages);
+
+    // Fetch posts with filter, pagination, and sorting
+    const posts = await PostModel.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .select("-__v")
+      .populate("userId", "name email avatarUrl");
+
+    res.status(200).json({
+      success: true,
+      message: "Posts fetched successfully",
+      posts,
+      totalPages,
+      currentPage
+    });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+};
