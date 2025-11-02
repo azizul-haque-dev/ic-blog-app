@@ -31,7 +31,7 @@ export async function createUserByAdmin({ name, email, password }) {
   const url = `${process.env.NEXT_APP_SERVER}/admin/users/create`;
   const options = {
     method: "POST",
-    body: JSON.stringify({name, email, password})
+    body: JSON.stringify({ name, email, password })
   };
 
   const data = await getData({ url, options });
@@ -40,7 +40,7 @@ export async function createUserByAdmin({ name, email, password }) {
     revalidatePath("/admin/allusers");
   }
 
-  return {success:true};
+  return { success: true };
 }
 export async function updateUserByAdmin({ userId, status }) {
   const url = `${process.env.NEXT_APP_SERVER}/admin/users/${userId}/status`;
@@ -109,7 +109,7 @@ export async function updatePostStatusByAdmin({ postId, status }) {
 
 export async function updateCommentSatusByAdmin({ commentId, status, postId }) {
   const url = `${process.env.NEXT_APP_SERVER}/admin/comments/${commentId}/status`;
-  const options = { method: "PUT", body: JSON.stringify(status) };
+  const options = { method: "PUT", body: JSON.stringify({ status }) };
 
   const data = await getData({ url, options });
   if (data?.success) {
