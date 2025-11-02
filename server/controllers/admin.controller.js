@@ -7,7 +7,7 @@ import {
   getAllUsersWithStats,
   updateCommentStatusById,
   updatePostStatusById,
-  updateUserStatusById,
+  updateUserStatusById
 } from "../services/admin.services.js";
 
 import mongoose, { Mongoose } from "mongoose";
@@ -20,21 +20,21 @@ const userCreationSchema = z.object({
   email: z.string().email("Invalid email address."),
   password: z.string().min(6, "Password must be at least 6 characters long."),
   role: z.enum(["user", "admin"]).optional(),
-  status: z.enum(["pending", "approved", "suspended"]).optional(),
+  status: z.enum(["pending", "approved", "suspended"]).optional()
 });
 
 const statusUpdateSchema = z.object({
-  status: z.enum(["pending", "approved", "suspended"]),
+  status: z.enum(["pending", "approved", "suspended"])
 });
 
 const postStatusUpdateSchema = z.object({
-  status: z.enum(["pending", "approved", "suspended"]),
+  status: z.enum(["pending", "approved", "suspended"])
 });
 
 const commentStatusSchema = z.object({
   status: z.enum(["pending", "approved", "suspended"], {
-    required_error: "Status is required.",
-  }),
+    required_error: "Status is required."
+  })
 });
 
 //User Management Controllers
@@ -64,15 +64,15 @@ export const createUserByAdmin = async (req, res) => {
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "User with this email already exists.",
+        message: "User with this email already exists."
       });
     }
 
     const newUser = await createNewUser(parseBody.data);
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "User created successfully.",
-      user: newUser,
+      user: newUser
     });
   } catch (error) {
     console.error("Controller Error - createUserByAdmin:", error);
@@ -102,7 +102,7 @@ export const updateUserStatus = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "User status updated.",
-      user: updatedUser,
+      user: updatedUser
     });
   } catch (error) {
     console.error("Controller Error - updateUserStatus:", error);
@@ -140,7 +140,7 @@ export const updatePostStatus = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Post status updated.",
-      post: updatedPost,
+      post: updatedPost
     });
   } catch (error) {
     res.status(501).json({ success: false, message: error.message });
@@ -165,7 +165,7 @@ export const updateCommentStatus = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Comment status updated successfully.",
-      data: updatedComment,
+      data: updatedComment
     });
   } catch (error) {
     if (error.message === "Comment not found.") {
@@ -206,14 +206,14 @@ export const getAllPendingPost = async (req, res) => {
 
     // Count total pending posts
     const totalPendingPosts = await PostModel.countDocuments({
-      status: { $ne: "approved" },
+      status: { $ne: "approved" }
     });
 
     // Send success response
     return res.status(200).json({
       success: true,
       total: totalPendingPosts,
-      posts: pendingPosts,
+      posts: pendingPosts
     });
   } catch (error) {
     console.error("Error fetching pending posts:", error);
@@ -222,7 +222,7 @@ export const getAllPendingPost = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to fetch pending posts",
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -235,7 +235,7 @@ export const getWithoutPendingPost = async (req, res) => {
     // Send success response
     return res.status(200).json({
       success: true,
-      posts,
+      posts
     });
   } catch (error) {
     console.error("Error fetching without pending posts posts:", error);
@@ -244,7 +244,7 @@ export const getWithoutPendingPost = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to fetch pending posts",
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -278,7 +278,7 @@ export const deleteUserbyId = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -313,14 +313,14 @@ export const updateUserRole = async (req, res) => {
     //  Send success response
     return res.status(200).json({
       success: true,
-      message: "User role updated successfully",
+      message: "User role updated successfully"
     });
   } catch (error) {
     console.error("Error updating user role:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
-      error: error.message,
+      error: error.message
     });
   }
 };

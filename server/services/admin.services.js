@@ -30,7 +30,7 @@ export const createNewUser = async (userData) => {
     password,
     role: role || "user",
     status: status || "approved",
-    isVerified: true, // Admin-created accounts are verified by default
+    isVerified: true, 
   });
 
   await newUser.save();
