@@ -1,5 +1,4 @@
 "use client";
-import { deleteAuthToken } from "@/actions/session.action";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -20,9 +19,9 @@ export function useLogout() {
       );
 
       const data = await res.json();
-      await deleteAuthToken();
+       await deleteAuthToken()
       if (res.ok) {
-        toast.success(data?.message);
+        toast.success("Logout successful");
         router.push("/login");
       } else {
         toast.error("Logout failed");
