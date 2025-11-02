@@ -64,5 +64,5 @@ export async function deleteAuthToken() {
   cookieJar.getAll().forEach((cookie) => {
     cookieJar.delete(cookie.name);
   });
-  redirect("/login");
+ return {success:true}
 }

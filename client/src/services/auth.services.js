@@ -7,13 +7,12 @@ export function useLogout() {
   const router = useRouter();
 
   const logout = async () => {
-    try {
-      await deleteAuthToken();
+    const res = await deleteAuthToken();
+    if (res.success) {
       toast.success("Logout successful");
       router.push("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      toast.error("Logout failed");
+    } else {
+      toast.error("Logout faild");
     }
   };
 
