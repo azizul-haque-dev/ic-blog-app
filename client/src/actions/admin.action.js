@@ -31,7 +31,7 @@ export async function createUserByAdmin({ name, email, password }) {
   const url = `${process.env.NEXT_APP_SERVER}/admin/users/create`;
   const options = {
     method: "POST",
-    body: JSON.stringify(name, email, password)
+    body: JSON.stringify({name, email, password})
   };
 
   const data = await getData({ url, options });

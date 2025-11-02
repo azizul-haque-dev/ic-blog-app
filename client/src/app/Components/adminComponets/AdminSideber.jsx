@@ -12,7 +12,7 @@ import {
 
 const sidebarItems = [
   { name: "Dashboard", icon: <MdDashboard />, link: "/admin" },
-  { name: "Create User", icon: <MdPeople />, link: "/createuser" },
+  { name: "Create User", icon: <MdPeople />, link: "/admin/createuser" },
   { name: "All Posts", icon: <MdPostAdd />, link: "/admin/allposts" },
   { name: "Pending Post", icon: <MdPostAdd />, link: "/admin/pending-post" },
   { name: "All Users", icon: <MdPeople />, link: "/admin/allusers" },
