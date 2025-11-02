@@ -35,7 +35,7 @@ export function generateVerifyEmailToken(email) {
     }
 
     // Token expires in 5 minutes
-    return jwt.sign(payload, secret, { expiresIn: "5m" });
+    return jwt.sign(payload, secret, { expiresIn: "15m" });
   } catch (error) {
     console.error("Error generating email verification token:", error);
     throw new Error("Failed to generate email verification token");

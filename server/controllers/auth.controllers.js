@@ -68,7 +68,7 @@ const registerUser = async (req, res) => {
     }
     const code = generate6DigitCode();
 
-    const emailToken = generateVerifyEmailToken({ email });
+    const emailToken = generateVerifyEmailToken(email);
 
     // await sendEmail({
     //   to: email,
