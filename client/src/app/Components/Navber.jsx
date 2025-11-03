@@ -16,12 +16,14 @@ function Navbar({ user }) {
   // Close mobile menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsMenuOpen(!isMenuOpen);
-      }
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(!isDropdownOpen);
-      }
+if (menuRef.current && !menuRef.current.contains(event.target)) {
+  setIsMenuOpen(false);
+}
+if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  setIsDropdownOpen(false);
+}
+
+
     }
 
     if (isMenuOpen || isDropdownOpen) {
@@ -35,15 +37,15 @@ function Navbar({ user }) {
 
   // shared handler: link click should close mobile menu and any open dropdown
   const handleLinkClick = () => {
-    setIsMenuOpen(!isMenuOpen);
-    setIsDropdownOpen(!isDropdownOpen);
+     setIsMenuOpen(false);
+  setIsDropdownOpen(false);
   };
 
   // logout wrapper so it also closes menus on mobile
   const handleLogout = async () => {
-    setIsMenuOpen(!isMenuOpen);
-    setIsDropdownOpen(!isDropdownOpen);
-    await logout();
+  setIsMenuOpen(false);
+  setIsDropdownOpen(false);
+  await logout();
   };
 
   return (
