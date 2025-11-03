@@ -147,9 +147,9 @@ function Navbar({ user }) {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="btn btn-ghost btn-circle avatar flex items-center justify-center"
               >
-                {user.imageUrl ? (
+                {user.avatarUrl ? (
                   <Image
-                    src={user.imageUrl}
+                    src={user.avatarUrl}
                     alt="Profile"
                     width={40}
                     height={40}
