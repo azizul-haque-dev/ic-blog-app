@@ -15,6 +15,20 @@ async function Page({ searchParams }) {
 
   const posts = postData?.posts || [];
   const totalPages = postData?.totalPages || 1;
+   if (!posts || posts.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-gray-700">
+            Post not found
+          </h2>
+          <p className="text-gray-500 mt-2">
+            There are no posts available right now. Please check back later.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-x-auto rounded-lg shadow-sm">
