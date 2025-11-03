@@ -3,12 +3,12 @@ import TeamCard from "@/app/Components/TeamCard";
 export default function Page() {
   const Teammembers = [
     {
-      name: "Lokman Sarker",
+      name: "Md Lokman Sarkar",
       role: "Fullstack Developer ",
-      image: "",
-      github: "https://github.com/talha",
-      linkedin: "https://linkedin.com/in/talha",
-      facebook: "https://facebook.com/talha"
+      image: "https://avatars.githubusercontent.com/u/77618516?v=4",
+      github: "https://github.com/lokmansarkar99",
+      linkedin: "https://www.linkedin.com/in/lokman-sarkar",
+      facebook: "https://www.facebook.com/lokman.sarkar.382"
     },
     {
       name: "Azizul Haque",
@@ -30,18 +30,18 @@ export default function Page() {
     {
       name: "Md Nasim Hosen",
       role: "Frontend developer ",
-      image: "/images/talha.jpg",
-      github: "https://github.com/talha",
-      linkedin: "https://linkedin.com/in/talha",
-      facebook: "https://facebook.com/talha"
+      image: "https://avatars.githubusercontent.com/u/197105339?v=4",
+      github: "https://github.com/mdnasimhosen22",
+      linkedin: "https://www.linkedin.com/in/md-nasim-hosen-35308a33b?",
+      facebook: "https://www.facebook.com/share/1BVJuUsZf4/"
     },
     {
-      name: "Md Talha",
-      role: "Full Stack Ai  ",
-      image: "/images/talha.jpg",
-      github: "https://github.com/talha",
-      linkedin: "https://linkedin.com/in/talha",
-      facebook: "https://facebook.com/talha"
+      name: "Abu Talha",
+      role: "Frontend developer ",
+      image: "https://i.ibb.co.com/xK50MfcY/my-profile-pic.png",
+      github: "https://github.com/abu-tal-ha",
+      linkedin: "https://www.linkedin.com/in/abu-talha-/",
+      facebook: "https://www.facebook.com/md.abu.tal.ha.206"
     }
   ];
 
