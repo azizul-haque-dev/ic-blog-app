@@ -38,7 +38,7 @@ export default function Page() {
     {
       name: "Abu Talha",
       role: "Frontend developer ",
-      image: "https://i.ibb.co.com/xK50MfcY/my-profile-pic.png",
+      image: "https://avatars.githubusercontent.com/u/178376366?v=4",
       github: "https://github.com/abu-tal-ha",
       linkedin: "https://www.linkedin.com/in/abu-talha-/",
       facebook: "https://www.facebook.com/md.abu.tal.ha.206"
