@@ -136,7 +136,7 @@ function Navbar({ user }) {
 
         {/* Desktop auth/profile */}
         <div className="hidden md:flex gap-2 items-center">
-          {!user ? (
+          {!user?.id ? (
             <Link
               href="/login"
               onClick={handleLinkClick}
