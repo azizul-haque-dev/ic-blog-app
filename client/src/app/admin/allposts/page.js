@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 async function Page({ searchParams }) {
-  const { page } = searchParams;
+  const { page } = await searchParams;
   const currentPage = Number(page) || 1;
 
   const postData = await getAllAdminBlogPost({

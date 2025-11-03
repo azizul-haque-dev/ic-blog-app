@@ -20,7 +20,7 @@ export const metadata = {
     siteName: "Blog Kori",
     images: [
       {
-        url: `${process.env.NEXT_APP_URL}/og-image.jpg`,
+        url: `${process.env.NEXT_APP_URL}/woman-working-servers-dark.png`,
         width: 1200,
         height: 630
       }

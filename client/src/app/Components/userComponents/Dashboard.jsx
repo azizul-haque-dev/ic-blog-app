@@ -22,7 +22,7 @@ export default async function UserDashBoard() {
 
         {/* Profile Section */}
         <div className="bg-white shadow-md rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 flex-col md:flex-row">
             <Image
               src={user?.avatarUrl || "/defaultProfile.png"}
               alt="Profile Picture"
