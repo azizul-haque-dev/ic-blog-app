@@ -45,14 +45,6 @@ export const createPost = async (req, res) => {
     const imageUrl = req.file.path;
     const imageId = req.file.filename;
 
-    // Extract user ID from authenticated user
-
-    // Handle optional categories field
-
-    // if (!categories && !Array.isArray(categories)) {
-    //   categories = [];
-    // }
-
     // Check if user exists
     if (!userId) {
       return res

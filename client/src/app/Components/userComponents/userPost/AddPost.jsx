@@ -62,7 +62,7 @@ export default function AddPost() {
       postFormData.append("image", selectedFile);
       postFormData.append("title", formData.title);
       postFormData.append("content", formData.content);
-      postFormData.append("categories", JSON.stringify([formData.categories]));
+      postFormData.append("categories", formData.categories);
 
       const result = await createPost(postFormData);
 
@@ -169,12 +169,12 @@ export default function AddPost() {
             <option value="" disabled>
               -- Select a Category --
             </option>
-            <option value="technology">Technology</option>
-            <option value="lifestyle">Lifestyle</option>
-            <option value="health">Health</option>
-            <option value="education">Education</option>
-            <option value="business">Business</option>
-            <option value="programming">Programming</option>
+            <option value="Technology">Technology</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Business">Business</option>
+            <option value="Programming">Programming</option>
           </select>
         </div>
 
