@@ -33,6 +33,7 @@ function CreateUser() {
   };
 
   return (
+    <div className="mt-6">
     <form onSubmit={handleSubmit} className="space-y-4">
       <input
         type="text"
@@ -66,6 +67,7 @@ function CreateUser() {
         {isLoading ? "Creating..." : "Sign Up"}
       </button>
     </form>
+    </div>
   );
 }
 
