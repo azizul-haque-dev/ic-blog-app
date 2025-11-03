@@ -17,7 +17,7 @@ function Navbar({ user }) {
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsMenuOpen(false);
+        setIsMenuOpen(!isMenuOpen);
       }
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
@@ -35,13 +35,13 @@ function Navbar({ user }) {
 
   // shared handler: link click should close mobile menu and any open dropdown
   const handleLinkClick = () => {
-    setIsMenuOpen(false);
+    setIsMenuOpen(!isMenuOpen);
     setIsDropdownOpen(false);
   };
 
   // logout wrapper so it also closes menus on mobile
   const handleLogout = async () => {
-    setIsMenuOpen(false);
+    setIsMenuOpen(!isMenuOpen);
     setIsDropdownOpen(false);
     await logout();
   };
@@ -89,9 +89,6 @@ function Navbar({ user }) {
                 <ul className="absolute right-0 mt-3 w-52 p-2 shadow bg-base-100 rounded-box z-10">
                   <li>
                     <Link href={redirectTo} onClick={handleLinkClick}>Profile</Link>
-                  </li>
-                  <li>
-                    <Link href="/settings" onClick={handleLinkClick}>Settings</Link>
                   </li>
                   <li>
                     <button onClick={handleLogout}>Logout</button>
