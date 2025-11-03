@@ -32,7 +32,7 @@ export default async function Page() {
               >
                 <td className="py-3 px-4">
                   <Image
-                    src={user.avatarUrl || "/defaultProfile.png"}
+                    src={user?.avatarUrl || "/defaultProfile.png"}
                     alt={user.name}
                     width={45}
                     height={45}

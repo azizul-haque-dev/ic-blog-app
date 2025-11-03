@@ -33,40 +33,48 @@ function CreateUser() {
   };
 
   return (
-    <div className="mt-6">
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        className="border border-gray-300 rounded-lg p-2 w-full"
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="border border-gray-300 rounded-lg p-2 w-full"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        className="border border-gray-300 rounded-lg p-2 w-full"
-      />
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="w-full bg-[#7050ff] text-white disabled:bg-gray-400 py-2 rounded-lg hover:bg-[#7033ff] transition duration-200 "
-      >
-        {isLoading ? "Creating..." : "Sign Up"}
-      </button>
-    </form>
+    <div className="mt-6 flex justify-center items-center flex-col md:flex-row">
+      <div className="text-center space-y-1">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 tracking-tight">
+          Want Create An User
+        </h2>
+        <p className="text-gray-500 text-sm md:text-base">
+          Please enter user info to continue
+        </p>
+      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="border border-gray-300 rounded-lg p-2 w-full"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="border border-gray-300 rounded-lg p-2 w-full"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="border border-gray-300 rounded-lg p-2 w-full"
+        />
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-[#7050ff] text-white disabled:bg-gray-400 py-2 rounded-lg hover:bg-[#7033ff] transition duration-200 "
+        >
+          {isLoading ? "Creating..." : "Sign Up"}
+        </button>
+      </form>
     </div>
   );
 }
