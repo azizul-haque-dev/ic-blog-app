@@ -20,7 +20,7 @@ function Navbar({ user }) {
         setIsMenuOpen(!isMenuOpen);
       }
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
+        setIsDropdownOpen(!isDropdownOpen);
       }
     }
 
@@ -36,13 +36,13 @@ function Navbar({ user }) {
   // shared handler: link click should close mobile menu and any open dropdown
   const handleLinkClick = () => {
     setIsMenuOpen(!isMenuOpen);
-    setIsDropdownOpen(false);
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   // logout wrapper so it also closes menus on mobile
   const handleLogout = async () => {
     setIsMenuOpen(!isMenuOpen);
-    setIsDropdownOpen(false);
+    setIsDropdownOpen(!isDropdownOpen);
     await logout();
   };
 
